@@ -1,0 +1,9 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Estándar del proceso de desarrollo}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Modelo de ciclo de vida}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Fases y actividades del ciclo de vida}{2}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Composición del equipo y asignación de roles}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Integrantes}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Roles y responsabilidades}{4}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Descripción del entorno de desarrollo}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Tecnologías y herramientas}{5}{subsection.3.1}%
