@@ -1,0 +1,210 @@
+\documentclass[12pt,a4paper]{article}
+
+% -----------------------------
+% PAQUETES BÁSICOS
+% -----------------------------
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc} % si usas Overleaf no hace falta, pero no molesta
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  citecolor=black
+}
+
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection.}{0.6em}{}
+
+% -----------------------------
+% DATOS DEL DOCUMENTO
+% -----------------------------
+\newcommand{\TeamName}{Equipo 6}
+\newcommand{\DeliveryName}{1.1 Ciclo de vida}
+
+\newcommand{\ProjectTitle}{Web "Sabor del Himalaya"}
+\newcommand{\CourseName}{Gestión de proyectos Informáticos}
+
+\newcommand{\AuthorA}{Guillermo Guhl Arruabarrena}
+\newcommand{\AuthorB}{Daniel Gomarín Ruesga}
+\newcommand{\AuthorC}{Marcos Romero Villodres}
+\newcommand{\AuthorD}{Carlos Sobrino Martin}
+\newcommand{\AuthorE}{Javier Pozuelo Ruiz}
+
+
+
+\date{\today}
+
+% -----------------------------
+% ENTORNOS ÚTILES
+% -----------------------------
+\newenvironment{activityblock}[3]{%
+  \subsubsection*{Actividad: #1}
+  \noindent\textbf{Objetivo:} #2 \\
+  \textbf{Producto resultante:} #3 \\
+  \vspace{0.3em}
+  \noindent\textbf{Descripción:}
+  \begin{itemize}[leftmargin=1.5em]
+}{%
+  \end{itemize}
+  \noindent\textbf{Ejemplo ilustrativo (si aplica):}\\
+  \vspace{0.3em}
+  \fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\small
+  \textit{Sustituye este recuadro por un ejemplo breve: un mockup, un fragmento de backlog, una captura, un diagrama, una plantilla de documento, etc.}
+  }}
+  \vspace{1em}
+}
+
+% -----------------------------
+% INICIO
+% -----------------------------
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\LARGE \textbf{\DeliveryName}\par}
+  \vspace{0.8cm}
+  {\Large \ProjectTitle\par}
+  \vspace{0.5cm}
+  {\large \CourseName\par}
+  \vspace{0.5cm}
+  {\large Equipo: \TeamName\par}
+  \vfill
+  \begin{tabular}{l}
+    \textbf{Integrantes:} \\
+    \AuthorA \\
+    \AuthorB \\
+    \AuthorC \\
+    \AuthorD \\
+    \AuthorE \\
+  \end{tabular}
+  \vfill
+  {\large \date{\today}\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% =========================================================
+\section{Estándar del proceso de desarrollo}
+
+\subsection{Modelo de ciclo de vida}
+\noindent
+\textbf{Modelo elegido:} \textit{Incremental}.\\
+\textbf{Justificación:} Se ha optado por un modelo de ciclo de vida incremental, puesto que este nos permite crear diferentes versiones funcionales del sistema de tal forma que estas se adapten a posibles cambios de requisitos de los clientes. Además, dado el carácter evolutivo del proyecto y la duración limitada de este, el modelo incremental es el que mejor se adapta a las necesidades de este trabajo.
+
+\vspace{0.6em}
+\noindent
+\textbf{Adaptación al contexto del proyecto:} En nuestro proyecto vamos a llevar una organización basada en weekly meetings en los cuales se va a poner en común el trabajo realizado por el momento, los posibles problemas que hayan aparecido durante este trabajo y las tareas que cada miembro del grupo ha de desarrollar para el siguiente meeting. Dichos meetings van a tratarse de realizar cada martes a las 19:00.
+
+\subsection{Fases y actividades del ciclo de vida}
+\noindent
+En esta sección se describen las fases y las actividades concretas del ciclo de vida definido por el equipo. Para cada actividad se indica el producto resultante y un ejemplo ilustrativo cuando es posible.
+
+\vspace{0.6em}
+
+% ---- TABLA RESUMEN (Fases/Actividades/Artefactos) ----
+\begin{longtable}{p{3.2cm} p{5.7cm} p{5.1cm}}
+\toprule
+\textbf{Fase} & \textbf{Actividades principales} & \textbf{Productos resultantes} \\
+\midrule
+\endhead
+% --- EJEMPLO (edita a tu proyecto) ---
+Organización del trabajo &
+La actividad principal de esta fase es asignar los diferentes roles a los integrantes del grupo. Además de esto, también se va a planificar el trabajo. &
+Diagrama de Gantt.
+
+\\
+\addlinespace
+
+Análisis de requisitos &
+En esta fase nos vamos a centrar en entender los requisitos de nuestro sistema. &
+Especificación de requisitos. \\
+\addlinespace
+
+Diseño &
+Durante esta fase se va a llevar acabo el diseño de la arquitectura del proyecto, el diseño de la base de datos y el diseño de los diferentes incrementos. &
+Diagrama de arquitectura; Estructura de la base de datos  \\
+\addlinespace
+
+Desarrollo de cada incremento y revisión de modelos de requisitos &
+En esta fase se va a desarrollar cada uno de los diferentes incrementos previamente definidos.&
+Los diferentes incrementos del sistema. Posibles cambios en los requisitos del sistema.\\
+\addlinespace
+
+Integración y validación de incrementos &
+En esta fase nos encargamos de integrar los diferentes incrementos y validar el correcto funcionamiento de nuestro sistema. &
+El sistema totalmente funcional. \\
+\addlinespace
+
+Entrega &
+En esta fase entregamos el producto resultante de nuestro proyecto. &
+Entrega final. \\
+
+\bottomrule
+\end{longtable}
+
+\newpage
+\section{Composición del equipo y asignación de roles}
+
+\subsection{Integrantes}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{\AuthorA}
+  \item \textbf{\AuthorB}
+  \item \textbf{\AuthorC}
+  \item \textbf{\AuthorD}
+  \item \textbf{\AuthorE}
+\end{itemize}
+
+\subsection{Roles y responsabilidades}
+\noindent
+En esta sección se van a asignar los diferentes roles de cada miembro del equipo:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{p{4.2cm} p{4.2cm} p{6.0cm}}
+\toprule
+\textbf{Rol} & \textbf{Responsable} & \textbf{Tareas principales} \\
+\midrule
+Desarrollador Backend (Gestor de la base de datos) & \AuthorA & Desarrollar el procesamiento de datos y la gestión de la base de datos.\\
+Desarrollador Frontend  & \AuthorB & Desarrollar e integrar las interfaces gráficas del sistema.\\
+Desarrollo Backend y Frontend & \AuthorC & Desarrollar la lógica del servidor y ayuda con la interfaz gráfica.\\
+Tester & \AuthorD & Encargado de validar la correcta funcionalidad del sistema. \\
+Jefe Proyecto y desarrollador & \AuthorE & Facilitar las tareas de organización y planificación del proyecto. 
+Ayudar en el desarrollo del backend y frontend.\\
+\end{tabular}
+\end{table}
+
+% =========================================================
+\newpage
+\section{Descripción del entorno de desarrollo}
+
+\subsection{Tecnologías y herramientas}
+\noindent
+A continuación se muestran las diferentes herramientas de trabajo las cuales barajamos utilizar durante el desarrollo del trabajo:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Lenguajes}: Python / Java / JavaScript / etc.
+  \item \textbf{Frameworks}: (ej.: FastAPI, Streamlit, React, Spring, etc.)
+  \item \textbf{Base de datos}: SQLite / PostgreSQL / MongoDB / etc.
+  \item \textbf{Control de versiones}: Git (GitHub/GitLab).
+  \item \textbf{Gestión del trabajo}: CliclkUp / Jira / Trello / Notion / GitHub Projects.
+  \item \textbf{Testing}: pytest / JUnit / etc.
+  \item \textbf{CI/CD}: GitHub Actions / GitLab CI.
+  \item \textbf{Contenedores}: Docker (si aplica).
+\end{itemize}
+
+\end{document}
