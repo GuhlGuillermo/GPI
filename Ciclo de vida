@@ -34,6 +34,9 @@
 \newcommand{\TeamName}{Equipo 6}
 \newcommand{\DeliveryName}{1.1 Ciclo de vida}
 
+\newcommand{\ProjectTitle}{Web "Sabor del Himalaya"} % <-- AÑADIDO
+\newcommand{\CourseName}{Gestión de proyectos Informáticos} % <-- AÑADIDO
+
 \newcommand{\AuthorA}{Guillermo Guhl Arruabarrena}
 \newcommand{\AuthorB}{Daniel Gomarín Ruesga}
 \newcommand{\AuthorC}{Marcos Romero Villodres}
@@ -154,6 +157,7 @@ Entrega final. \\
 \bottomrule
 \end{longtable}
 
+\newpage
 \section{Composición del equipo y asignación de roles}
 
 \subsection{Integrantes}
@@ -179,24 +183,25 @@ Desarrollador Backend (Gestor de la base de datos) & \AuthorA & Desarrollar el p
 Desarrollador Frontend  & \AuthorB & Desarrollar e integrar las interfaces gráficas del sistema.\\
 Desarrollo Backend y Frontend & \AuthorC & Desarrollar la lógica del servidor y ayuda con la interfaz gráfica.\\
 Tester & \AuthorD & Encargado de validar la correcta funcionalidad del sistema. \\
-jhajda & \AuthorE & \\
-\bottomrule
+Jefe Proyecto y desarrollador & \AuthorE & Facilitar las tareas de organización y planificación del proyecto. 
+Ayudar en el desarrollo del backend y frontend.\\
 \end{tabular}
 \end{table}
 
 % =========================================================
+\newpage
 \section{Descripción del entorno de desarrollo}
 
 \subsection{Tecnologías y herramientas}
 \noindent
-A continuación se muestran las diferentes herramientas de trabajo que vamos a utilizar durante el desarrollo del trabajo:
+A continuación se muestran las diferentes herramientas de trabajo las cuales barajamos utilizar durante el desarrollo del trabajo:
 
 \begin{itemize}[leftmargin=1.5em]
   \item \textbf{Lenguajes}: Python / Java / JavaScript / etc.
   \item \textbf{Frameworks}: (ej.: FastAPI, Streamlit, React, Spring, etc.)
   \item \textbf{Base de datos}: SQLite / PostgreSQL / MongoDB / etc.
   \item \textbf{Control de versiones}: Git (GitHub/GitLab).
-  \item \textbf{Gestión del trabajo}: Jira / Trello / Notion / GitHub Projects.
+  \item \textbf{Gestión del trabajo}: CliclkUp / Jira / Trello / Notion / GitHub Projects.
   \item \textbf{Testing}: pytest / JUnit / etc.
   \item \textbf{CI/CD}: GitHub Actions / GitLab CI.
   \item \textbf{Contenedores}: Docker (si aplica).
