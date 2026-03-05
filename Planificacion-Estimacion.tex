@@ -1,0 +1,179 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{eurosym}
+\usepackage{float} % Paquete necesario para forzar la posición de las tablas con [H]
+
+\title{\textbf{1.2 Estimación y estrategia} \\ \Large Web `Sabor del Himalaya' \\ \large Gestión de proyectos Informáticos}
+\author{
+    \textbf{Equipo 6} \\
+    Guillermo Guhl Arruabarrena \\
+    Daniel Gomarín Ruesga \\
+    Marcos Romero Villodres \\
+    Carlos Sobrino Martin \\
+    Javier Pozuelo Ruiz
+}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Requisitos del sistema}
+Basándonos en el diseño de la arquitectura y las bases de datos podemos encontrar distintos puntos a tener en cuenta en el diseño y la funcionalidad del sistema. Así mismo listamos los distintos Puntos de Función presentes en cada uno de ellos.
+
+\begin{itemize}
+    \item \textbf{Gestión de Platos:} El sistema permitirá al Chef crear, leer, actualizar y borrar platos (nombre, descripción, precio, categoría, temporada).
+    \item \textbf{Gestión de Menús Diarios:} El sistema permitirá organizar platos en menús diarios (entrantes, principales, postres).
+    \item \textbf{Registro y Perfil de Usuarios:} Los clientes podrán registrarse y el sistema mantendrá su historial de gasto y estado de cliente habitual.
+    \item \textbf{Tramitación de Pedidos:} El sistema permitirá al cliente seleccionar ítems, calcular el importe total y registrar la dirección de entrega.
+    \item \textbf{Interfaz de Validación de Pagos:} Conexión con un sistema externo para validar transacciones de pago.
+    \item \textbf{Seguimiento de Pedidos:} Los repartidores y clientes podrán consultar y actualizar el estado de la entrega en tiempo real.
+\end{itemize}
+
+\section{Cálculo de los Puntos de Función de todo el Proyecto}
+Tenemos que tener en cuenta en este punto los distintos tipos de tablas que vamos a enumerar y para qué sirven.
+
+\begin{itemize}
+    \item \textbf{ILF o Archivos Lógicos Internos:} Sirven para contabilizar los grupos de datos que el sistema mantiene actualizados internamente. En nuestro caso, serían las colecciones de MongoDB.
+    \item \textbf{EIF o Archivos de Interfaz Externos:} Sirven para identificar datos que nuestro sistema utiliza pero que son mantenidos por otra aplicación. Un ejemplo claro en nuestro diseño es el Sistema Externo de Validación de Pagos.
+    \item \textbf{EI o Entradas Externas:} Sirven para registrar los procesos donde el usuario introduce datos que modifican el estado del sistema. Por ejemplo, cuando el Chef gestiona la carta o cuando el cliente realiza un pedido.
+    \item \textbf{EO o Salidas Externas:} Sirven para contabilizar procesos que envían datos al exterior y que implican una lógica de cálculo o una actualización de estado. Un ejemplo sería la generación de una factura o el envío de un reporte de ventas.
+    \item \textbf{EQ o Consultas Externas:} Sirven para medir las funciones que permiten al usuario obtener información sin realizar cálculos complejos ni modificar los datos. En nuestro proyecto, esto corresponde a la Consulta de estado por parte del cliente o repartidores.
+\end{itemize}
+
+\subsection{Tabla ILF}
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{} & \textbf{Datos} & \textbf{Registros} & \textbf{Complejidad} & \textbf{PF} \\
+\midrule
+Colección Usuarios & 5 & 1 & Baja & 7 \\
+Colección platos/menús & 10 & 2 & Media & 10 \\
+Colección pedidos & 8 & 1 & Baja & 7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tabla EIF}
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{} & \textbf{Datos} & \textbf{Registros} & \textbf{Complejidad} & \textbf{PF} \\
+\midrule
+Sistema externo de pagos & 3 & 1 & Baja & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tabla EI}
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{} & \textbf{Datos} & \textbf{Registros} & \textbf{Complejidad} & \textbf{PF} \\
+\midrule
+Alta de nuevo usuario & 4 & 1 & Baja & 3 \\
+Creación de nuevo pedido & 6 & 2 & Media & 4 \\
+Actualización de carta (Chef) & 6 & 1 & Baja & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Tabla EO}
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{} & \textbf{Datos} & \textbf{Registros} & \textbf{Complejidad} & \textbf{PF} \\
+\midrule
+Confirmación de pago/factura & 5 & 2 & Media & 5 \\
+Reporte de gastos por usuario & 4 & 1 & Baja & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tabla EQ}
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{} & \textbf{Datos} & \textbf{Registros} & \textbf{Complejidad} & \textbf{PF} \\
+\midrule
+Consulta estado del pedido & 3 & 1 & Baja & 3 \\
+Visualización de menú diario & 5 & 1 & Baja & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Estimación del Esfuerzo y Coste}
+
+Para estimar el esfuerzo y el coste de la Web `Sabor del Himalaya', hemos consolidado los Puntos de Función (PF) obtenidos en las tablas anteriores siguiendo el método estándar de análisis de métricas de software.
+
+\subsection{Cálculo Total de Puntos de Función}
+Sumando los valores de cada componente, obtenemos los Puntos de Función Sin Ajustar (PFSA):
+\begin{itemize}
+    \item \textbf{ILF (Archivos Lógicos Internos):} 24 PF
+    \item \textbf{EIF (Archivos de Interfaz Externos):} 5 PF
+    \item \textbf{EI (Entradas Externas):} 10 PF
+    \item \textbf{EO (Salidas Externas):} 9 PF
+    \item \textbf{EQ (Consultas Externas):} 6 PF
+\end{itemize}
+\textbf{Total Puntos de Función (PF):} 54 PF.
+
+\textit{Nota: Para este cálculo asumimos un Factor de Ajuste de Valor (FAV) de 1.0, al considerar que las características generales del sistema presentan una complejidad estándar.}
+
+\subsection{Esfuerzo, Duración y Coste Económico}
+Basándonos en métricas de la industria para el desarrollo de aplicaciones web con frameworks modernos, establecemos una productividad media de \textbf{10 horas por Punto de Función}.
+
+\begin{itemize}
+    \item \textbf{Esfuerzo Total:} 54 PF $\times$ 10 horas/PF = \textbf{540 horas} de trabajo.
+    \item \textbf{Coste Estimado:} Asumiendo un coste medio de desarrollo de 20 \euro{}/hora, el coste base del proyecto sería: 540 horas $\times$ 20 \euro{}/hora = \textbf{10.800 \euro{}}.
+    \item \textbf{Duración del Proyecto:} Contando con un equipo de 5 desarrolladores trabajando a tiempo parcial (10 horas semanales por integrante, total de 50 horas/semana como equipo), el desarrollo tomará aproximadamente \textbf{11 semanas} (casi 3 meses).
+\end{itemize}
+
+\section{Estrategia del Proyecto}
+
+Dado que el equipo se enfrenta a una curva de aprendizaje con varias de las tecnologías a utilizar (bases de datos, consumo de APIs y diseño de interfaces), el ciclo de vida \textbf{incremental} se adaptará para incluir una fuerte componente de \textbf{prototipado y exploración técnica}. Esto nos permitirá investigar, probar y validar las herramientas antes de consolidar el código de cada incremento.
+
+\subsection{Organización y Metodología}
+\begin{itemize}
+    \item \textbf{Spikes Técnicos y Fase 0:} Antes de desarrollar funcionalidades complejas, se asignarán tareas de investigación (\textit{Spikes}) para resolver incertidumbres tecnológicas. Esto incluye preparar las máquinas, diseñar la arquitectura de red y hacer pruebas aisladas de consumo de APIs.
+    \item \textbf{Prototipado Evolutivo:} Los primeros desarrollos servirán como Pruebas de Concepto (PoC). Por ejemplo, esquemas iniciales de bases de datos para probar consultas ágiles, que irán evolucionando hasta soportar el modelo de datos final.
+    \item \textbf{Desarrollo por Incrementos:} Una vez validada la viabilidad técnica de cada bloque, el proyecto crecerá integrando diseño web, persistencia de datos y lógica de negocio progresivamente.
+\end{itemize}
+
+\subsection{Fases de Ejecución (Plan de Incrementos Adaptado)}
+\begin{enumerate}
+    \item \textbf{Fase 0 e Incremento 1: Preparación, Pruebas y Base Arquitectónica (Semanas 1-4)}
+    \begin{itemize}
+        \item \textit{Investigación:} Preparación de las máquinas/entornos de desarrollo y creación de los primeros bocetos de diseño web (\textit{mockups}).
+        \item \textit{Pruebas de Concepto (PoC):} Creación de un esquema básico en MongoDB para validar consultas ágiles y un \textit{script} simple para asegurar que el equipo sabe consumir la API externa de pagos.
+        \item \textit{Desarrollo Base:} Implementación del módulo de Registro y Perfil de Usuarios (ILF y EI) sobre el entorno ya configurado.
+        \item \textit{Entregable:} Entorno de desarrollo operativo y aplicación base conectada a la base de datos.
+    \end{itemize}
+    \item \textbf{Incremento 2: Gestión Gastronómica y Front-end (Semanas 5-8)}
+    \begin{itemize}
+        \item \textit{Front-end:} Aplicación del diseño web definitivo a las pantallas principales basándose en lo aprendido en la Fase 0.
+        \item \textit{Back-end:} Interfaces y lógica para el Chef (CRUD de Platos) y visualización de Menús Diarios (ILF, EI y EQ).
+        \item \textit{Entregable:} Sistema con interfaz de usuario refinada, capaz de gestionar y mostrar la oferta gastronómica.
+    \end{itemize}
+    \item \textbf{Incremento 3: Transacciones y Despliegue (Semanas 9-11)}
+    \begin{itemize}
+        \item \textit{Desarrollo:} Tramitación de pedidos y lógica del carrito de compras.
+        \item \textit{Integración Compleja:} Implementación real de la pasarela de pagos, aplicando lo aprendido en la PoC inicial (EIF y EO).
+        \item \textit{Entregable:} Versión final del sistema con ciclo de compra operativo y desplegado en los servidores definitivos.
+    \end{itemize}
+\end{enumerate}
+
+\end{document}
