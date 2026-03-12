@@ -1,0 +1,171 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}\usepackage{eurosym}
+\usepackage{float} % Paquete necesario para forzar la posición de las tablas con [H]
+
+\title{\textbf{1.2 Estimación y estrategia} \\ \Large Web `Sabor del Himalaya' \\ \large Gestión de proyectos Informáticos}
+\author{
+    \textbf{Equipo 6} \\
+    Guillermo Guhl Arruabarrena \\
+    Daniel Gomarín Ruesga \\
+    Marcos Romero Villodres \\
+    Carlos Sobrino Martin \\
+    Javier Pozuelo Ruiz
+}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Requisitos del sistema}
+A continuación se muestran los requisitos del sistema:
+
+\begin{itemize}
+    \item \textbf{Gestión de Platos (REQ 1):} El sistema permitirá al Chef crear, leer, actualizar, categorizar y borrar platos (nombre, descripción, precio, categoría, temporada). El sistema se encargará de asignarle un identificador a los diferentes platos.
+    \item \textbf{Gestión de Menús Diarios (REQ 2):} El sistema permitirá organizar los menús diarios al chef (entrantes, principales, postres, fecha). El sistema le asignará un identificador a cada menú diario. En el caso de no haber menú en una fecha concreta, el sistema debe informar al usuario de la situación.
+    \item \textbf{Navegación de la carta (REQ 3):} El sistema debe permitir al usuario navegar a través de la carta.
+    \item \textbf{Tramitación de Pedidos (REQ 4):} El sistema permitirá al cliente seleccionar platos, calcular el importe total y registrar la dirección de entrega.
+    \item \textbf{Registro y Perfil de Usuarios (REQ 5):} Los clientes podrán registrarse y el sistema mantendrá su historial de pedidos y estado del pedido. Además el sistema ofrecerá descuentos a los clientes ya registrados y la posibilidad de modificar sus pedidos con ciertas limitaciones.
+    \item \textbf{Interfaz de Validación de Pagos (REQ 6):} El sistema debe conectarse con un sistema externo para validar transacciones de pago.
+    \item \textbf{Seguimiento de Pedidos (REQ 7):} Los repartidores y clientes podrán consultar y actualizar el estado de la entrega en tiempo real.
+    \item \textbf{Seguimiento de Facturación (REQ 8):} El sistema ha de seguir el volumen de facturación diario.
+\end{itemize}
+
+\section{Cálculo de los Puntos de Función de todo el Proyecto}
+En esta sección se muestran las diferentes tablas que se han utilizado para llevar a cabo el calculo de los Puntos de Función.
+
+
+\subsection{Tabla ILF}
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm}p{5cm}cccp{3cm}} % Ajuste de anchos para evitar que se rompa
+\toprule
+\textbf{Nombre} & \textbf{DETs} & \textbf{RETs} & \textbf{Complejidad} & \textbf{PF} & \textbf{Requisitos} \\ 
+\midrule
+Colección Usuarios & Nombre, email, gasto\_total, es\_cliente\_habitual, id\_usuario, contraseña & 1 & Baja & 7 & REQ 5 \\ \addlinespace
+Colección platos & id\_plato, nombre\_plato, descripcion, precio\_plato, categoria, es\_de\_temporada & 1 & Baja & 7 & REQ 1 \\ \addlinespace
+Colección pedidos & id\_pedido, id\_usuario, items, importe\_total, estado, dir\_entrega, hora\_entrega, info\_pago & 2 & Baja & 7 & REQ 4, REG 7 \\ \addlinespace
+Colección menú & id\_menu, fecha, entrantes, platos\_principal, postres, precio\_menu & 3 & Baja & 7 & REQ 2 \\ 
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tabla EIF}
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm}p{5cm}cccp{3cm}} % Ajuste de anchos para evitar que se rompa
+\toprule
+\textbf{Nombre} & \textbf{DETs} & \textbf{RETs} & \textbf{Complejidad} & \textbf{PF} & \textbf{Requisitos} \\ 
+\midrule
+Sistema externo de pagos & id\_usuario, num\_tarjeta, clave\_tarjeta, precio\_pedido & 1 & Baja & 5 & REQ 6, REQ 8 \\ \addlinespace
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tabla EI}
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm}p{5cm}cccp{3cm}} % Ajuste de anchos para evitar que se rompa
+\toprule
+\textbf{Nombre} & \textbf{DETs} & \textbf{FTR} & \textbf{Complejidad} & \textbf{PF} & \textbf{Requisitos} \\ 
+\midrule
+Alta de nuevo usuario & nombre, email, contraseña, dirección, fecha\_alta, fecha\_baja & 1 & Baja & 3 & REQ 5\\
+Creación de nuevo pedido & nombre, email, contraseña, dirección, tarjeta, clave\_tarjeta, selección\_productos,  & 2 & Media & 4 & REQ 4\\
+Actualización de carta (Chef) & plato\_a\_añadir, plato\_a\_eliminar & 2 & Baja & 3 & REQ 1\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection{Tabla EO}
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm}p{5cm}cccp{3cm}} % Ajuste de anchos para evitar que se rompa
+\toprule
+\textbf{Nombre} & \textbf{DETs} & \textbf{FTR} & \textbf{Complejidad} & \textbf{PF} & \textbf{Requisitos} \\ 
+\midrule
+Confirmación de pago/factura & id\_usuario, fecha, dirección, items\_del\_pedido, coste, info\_pago & 2 & Media & 5 & REQ 6\\
+Reporte de gastos por usuario & nombre, email, gasto\_mensual, es\_cliente\_habitual, info\_pedidos\_mes  & 2 & Media & 5 & REQ 5\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Tabla EQ}
+La tabla de consultas externas (EQ) la vamos a separar en dos, una primera que va a representar la entrada y otra que representa la información de la salida. Es importante recalcar que hacemos esta división ya que se trata de una tabla con bastantes columnas y latex no permite introducirla
+
+\subsubsection{TABLA EQ (ENTRADA)}
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm}p{5cm}cccp{3cm}} % Ajuste de anchos para evitar que se rompa
+\toprule
+\textbf{Nombre} & \textbf{DETs} & \textbf{FTR} & \textbf{Complejidad} & \textbf{PF} & \textbf{Requisitos} \\ 
+\midrule
+Consulta estado del pedido & id\_pedido (en caso de estar registrado, sino se añadirian más)  & 0 & Baja & 3 & REQ 7\\
+Consulta menu diario & fecha  & 0 & Baja & 3 & REQ 3, REQ 2\\
+\bottomrule
+\end{tabular}
+\end{table}
+\subsubsection{TABLA EQ (SALIDA)}
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm}p{5cm}cccp{3cm}} % Ajuste de anchos para evitar que se rompa
+\toprule
+\textbf{Nombre} & \textbf{DETs} & \textbf{FTR} & \textbf{Complejidad} & \textbf{PF} & \textbf{Requisitos} \\ 
+\midrule
+Consulta estado del pedido & id\_pedido, estado, hora\_entrega  & 1 & Baja & 3 & REQ 7\\
+Consulta menu diario & entrantes, platos\_principal, postres, precio\_menu, id\_menu  & 1 & Baja & 3 & REQ 3, REQ 2\\\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Estimación del Esfuerzo y Coste}
+
+Vamos a calcular la estimación del esfuerzo y del coste basándonos en los puntos de función previamente calculados y los siguientes ratios:
+
+\begin{itemize}
+  \item \textbf{Ratio de productividad:} 5 horas / punto de función
+  \item \textbf{Ratio de coste:} 50€/hora
+\end{itemize}
+
+Una vez calculados los puntos de función, nos damos cuenta de que tenemos un total de \textbf{59 puntos de función.} Luego vamos a calcular la estimación de esfuerzo y de coste.
+
+\begin{itemize}
+  \item \textbf{Estimación de esfuerzo:} 59 PF * 5 h/PF = 295 horas
+  \item \textbf{Estimación de coste:} 295 h * 50 €/h = 14750€
+\end{itemize}
+
+
+\section{Estrategia del Proyecto}
+
+Nuestro equipo se compone de 5 miembros y puesto que cada miembro tiene un tiempo de dedicación a la asignatura de 45 horas, el equipo dispone de un total de 45 * 5 = 225 horas de trabajo. Previamente se ha estimado que el esfuerzo que requeririamos para llevar a cabo este proyecto es de 295 horas. Además, esta asignatura se compone de dos ciclos:
+
+\begin{itemize}
+  \item \textbf{Primer ciclo:} 7 semanas (70\%)
+  \item \textbf{Segundo ciclo:} 3 semanas (30\%)
+\end{itemize}
+
+En nuestro caso vamos a dividir el esfuerzo dedicado a cada ciclo de forma proporcional, luego tendremos lo siguiente:
+
+\begin{itemize}
+  \item \textbf{Primer ciclo:} 158 horas (70\% aprox)
+  \item \textbf{Segundo ciclo:} 67 horas (30\% aprox)
+\end{itemize}
+
+Luego en cada ciclo vamos a llevar a cabo los siguientes requisitos:
+
+\begin{itemize}
+  \item \textbf{Primer ciclo:} REQ 1, REQ 2, REQ 4
+  \item \textbf{Segundo ciclo:} REQ 3, REQ 6
+\end{itemize}
+
+\end{document}
