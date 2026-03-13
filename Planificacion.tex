@@ -1,0 +1,139 @@
+\documentclass[12pt,a4paper,titlepage]{article} 
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{amssymb} 
+\geometry{a4paper, margin=2.5cm}
+
+\title{\textbf{Planificación Ciclo 1}}
+\author{
+    \textbf{Grupo 2:} \\
+    Guillermo Guhl Arruabarrena \\
+    Daniel Gomarín Ruesga \\
+    Marcos Romero Villodres \\
+    Carlos Sobrino Martin \\
+    Javier Pozuelo Ruiz
+}
+\date{}
+
+\begin{document}
+
+\maketitle 
+
+\tableofcontents 
+\newpage 
+
+\section{Explicación del Diagrama de Gantt}
+
+\begin{figure}[htbp]
+    \centering
+    % Cambia "Diagrama-Gant.png" por el nombre real de tu archivo si varía
+    \includegraphics[width=\textwidth]{Diagrama-Gant.png} 
+    \caption{Diagrama de Gantt del Ciclo 1.}
+    \label{fig:diagrama_gantt}
+\end{figure}
+
+A continuación, se detalla la planificación representada en el diagrama de Gantt. Se enumeran las tareas correspondientes al ``Ciclo 1'', su duración estimada en el calendario y las personas asignadas a llevarlas a cabo:
+
+\begin{itemize}
+    \item \textbf{Ciclo de vida}: Asignada a: Marcos Romero Villodres, Carlos Sobrino Martin, Daniel Gomarín Ruesga.
+    \item \textbf{Estimación y Estrategia.}: Asignada a: Carlos Sobrino Martin, Guillermo Guhl Arruabarrena, Daniel Gomarín Ruesga.
+    \item \textbf{Planificación Ciclo 1}: Asignada a: Marcos Romero Villodres, Daniel Gomarín Ruesga, Guillermo Guhl Arruabarrena.
+    \item \textbf{Creación del entorno de desarrollo}: Asignada a: Javier Pozuelo Ruiz.
+    
+    \item \textbf{Definir modelo E/R}: Asignada a: Guillermo Guhl Arruabarrena. Esta tarea principal se desglosa en:
+    \begin{itemize}
+        \item \textbf{Definir el modelo E/R asociado a los requisitos (REQ 1, REQ 2, REQ4)}: Asignada a: Guillermo Guhl Arruabarrena.
+        \item \textbf{Elaborar la documentación.}: Asignada a: Guillermo Guhl Arruabarrena.
+    \end{itemize}
+
+    \item \textbf{Creación Backend}: Asignada a: Guillermo Guhl Arruabarrena, Marcos Romero Villodres, Carlos Sobrino Martin. Esta tarea se desglosa en:
+    \begin{itemize}
+        \item \textbf{Creación de las entidades.}: Asignada a: Guillermo Guhl Arruabarrena.
+        \item \textbf{Comprobar persistencia en base de datos}: Asignada a: Guillermo Guhl Arruabarrena, Carlos Sobrino Martin.
+    \end{itemize}
+
+    \item \textbf{Implementación lógica de negocio}: Asignada a: Daniel Gomarín Ruesga, Javier Pozuelo Ruiz, Marcos Romero Villodres.
+    
+    \item \textbf{Creación Frontend}: Asignada a: Javier Pozuelo Ruiz, Daniel Gomarín Ruesga, Marcos Romero Villodres. Esta tarea principal se desglosa en:
+    \begin{itemize}
+        \item \textbf{Definir rutas}: Asignada a: Daniel Gomarín Ruesga.
+        \item \textbf{Diseñar vistas}: Asignada a: Marcos Romero Villodres, Daniel Gomarín Ruesga, Javier Pozuelo Ruiz.
+        \item \textbf{API}: Asignada a: Javier Pozuelo Ruiz, Marcos Romero Villodres, Daniel Gomarín Ruesga.
+    \end{itemize}
+    
+    \item \textbf{Integración y test}: Asignada a: Carlos Sobrino Martin, Javier Pozuelo Ruiz.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\newpage
+\section{Esfuerzo Estimado por Persona (Horas)}
+
+En la siguiente tabla se especifica la estimación de esfuerzo en horas que se le asigna a cada miembro del equipo. Se ha realizado un reparto homogéneo considerando un límite de 160 horas totales para el primer ciclo (32 horas de dedicación por persona), ponderando el peso técnico de cada tarea.
+
+\vspace{0.5cm}
+
+\begin{longtable}{@{}llc@{}}
+    \toprule
+    \textbf{Persona} & \textbf{Tarea} & \textbf{Esfuerzo Asignado} \\ \midrule
+    \endfirsthead
+    
+    \toprule
+    \textbf{Persona} & \textbf{Tarea} & \textbf{Esfuerzo Asignado} \\ \midrule
+    \endhead
+    
+    \bottomrule
+    \endfoot
+    
+    \bottomrule
+    \endlastfoot
+
+    % Marcos Romero Villodres (MV) -> Total: 32h
+    \textbf{Marcos Romero Villodres} & Ciclo de vida & 4 h \\
+     & Planificación Ciclo 1 & 2 h \\
+     & Implementación lógica de negocio & 10 h \\
+     & \textbf{Creación Frontend (Total)} & \textbf{16 h} \\
+     & $\llcorner$ Diseñar vistas & 10 h \\
+     & $\llcorner$ API & 6 h \\ \addlinespace
+
+    % Carlos Sobrino Martin (C) -> Total: 32h
+    \textbf{Carlos Sobrino Martin} & Ciclo de vida & 5 h \\
+     & Estimación y Estrategia. & 7 h \\
+     & \textbf{Creación Backend (Total)} & \textbf{8 h} \\
+     & $\llcorner$ Comprobar persistencia en BD & 8 h \\
+     & Integración y test & 12 h \\ \addlinespace
+
+    % Daniel Gomarín Ruesga (DR) -> Total: 32h
+    \textbf{Daniel Gomarín Ruesga} & Ciclo de vida & 3 h \\
+     & Estimación y Estrategia. & 3 h \\
+     & Planificación Ciclo 1 & 2 h \\
+     & Implementación lógica de negocio & 8 h \\
+     & \textbf{Creación Frontend (Total)} & \textbf{16 h} \\
+     & $\llcorner$ Definir rutas & 5 h \\
+     & $\llcorner$ Diseñar vistas & 6 h \\
+     & $\llcorner$ API & 5 h \\ \addlinespace
+
+    % Guillermo Guhl Arruabarrena (GA) -> Total: 32h
+    \textbf{Guillermo Guhl Arruabarrena} & Estimación y Estrategia. & 5 h \\
+     & Planificación Ciclo 1 & 2 h \\
+     & \textbf{Definir modelo E/R (Total)} & \textbf{12 h} \\
+     & $\llcorner$ Definir el modelo E/R (Reqs) & 8 h \\
+     & $\llcorner$ Elaborar la documentación. & 4 h \\
+     & \textbf{Creación Backend (Total)} & \textbf{13 h} \\
+     & $\llcorner$ Creación de las entidades. & 9 h \\
+     & $\llcorner$ Comprobar persistencia en BD & 4 h \\ \addlinespace
+
+    % Javier Pozuelo Ruiz (JR) -> Total: 32h
+    \textbf{Javier Pozuelo Ruiz} & Creación del entorno de desarrollo & 4 h \\
+     & Implementación lógica de negocio & 8 h \\
+     & \textbf{Creación Frontend (Total)} & \textbf{12 h} \\
+     & $\llcorner$ Diseñar vistas & 6 h \\
+     & $\llcorner$ API & 6 h \\
+     & Integración y test & 8 h \\ 
+\end{longtable}
+
+\end{document}
