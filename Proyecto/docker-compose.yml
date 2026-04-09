@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api_backend:
+    build: 
+      context: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      # Sobreescribe configuración para conectarse al servicio hermanado
+      - MONGO_URI=mongodb://mongo:27017/sabor_del_himalaya
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/app
+
+  web_frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:5000/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api_backend
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
