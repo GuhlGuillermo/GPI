@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pedido</title>
+
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        button { margin: 5px; padding: 8px; background: #8b0000; color: white; }
+    </style>
+</head>
+<body>
+
+<h1>🧾 Crear Pedido</h1>
+
+<input id="direccion" placeholder="Dirección">
+
+<ul id="platosPedido"></ul>
+
+<button onclick="crearPedido()">Confirmar</button>
+
+<p id="resultado"></p>
+
+<script>
+let carrito = [];
+
+async function cargarPlatosParaPedido() {
+    const res = await fetch("/platos");
+    const data = await res.json();
+
+    const lista = document.getElementById("platosPedido");
+
+    data.forEach(p => {
+        const li = document.createElement("li");
+        li.innerHTML = `${p.nombre} - ${p.precio}€
+        <button onclick="añadir('${p._id}')">Añadir</button>`;
+        lista.appendChild(li);
+    });
+}
+
+function añadir(id) {
+    carrito.push({ plato_id: id, cantidad: 1 });
+}
+
+async function crearPedido() {
+    const direccion = document.getElementById("direccion").value;
+
+    const res = await fetch("/pedidos", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ platos: carrito, direccion })
+    });
+
+    const data = await res.json();
+    document.getElementById("resultado").textContent = "Total: " + data.total + "€";
+}
+
+cargarPlatosParaPedido();
+</script>
+
+</body>
+</html>

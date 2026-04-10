@@ -1,1 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Añadir Plato</title>
 
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;          /* 👈 elimina margen raro */
+            padding: 40px 20px; /* 👈 espacio uniforme */
+        }
+
+        .form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;   /* 👈 controla el ancho real */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+            margin: 0 auto;     /* 👈 CENTRADO PERFECTO */
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #a30000;
+        }
+
+        .back {
+            margin-bottom: 10px;
+            display: inline-block;
+            cursor: pointer;
+            color: #8b0000;
+        }
+
+        #mensaje {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* BLOQUE IMAGEN */
+        .imagen-container {
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .imagen-container input {
+            margin-top: 10px;
+        }
+
+        #preview {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <div class="back" onclick="volver()">⬅ Volver</div>
+
+    <h2>➕ Añadir Plato</h2>
+
+    <input id="nombre" placeholder="Nombre del plato">
+
+    <input id="descripcion" placeholder="Descripción">
+
+    <input id="precio" placeholder="Precio">
+
+    <input id="categoria" placeholder="Categoría">
+
+    <!-- TEMPORADA -->
+    <label>¿Es de temporada?</label>
+    <select id="temporada">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+    </select>
+
+    <!-- IMAGEN -->
+    <div class="imagen-container">
+        <p><strong>Introduce la foto del plato</strong></p>
+
+        <input id="imagen" type="file" accept="image/*" onchange="previewImagen(event)">
+
+        <img id="preview" style="display:none;">
+    </div>
+
+    <button onclick="crearPlato()">Guardar Plato</button>
+
+    <p id="mensaje"></p>
+
+</div>
+
+<script>
+function volver() {
+    window.location.href = "/platos";
+}
+
+// PREVIEW IMAGEN
+function previewImagen(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById("preview");
+
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+    }
+}
+
+// CREAR PLATO
+async function crearPlato() {
+    const formData = new FormData();
+
+    formData.append("nombre", document.getElementById("nombre").value);
+    formData.append("descripcion", document.getElementById("descripcion").value);
+    formData.append("precio", document.getElementById("precio").value);
+    formData.append("categoria", document.getElementById("categoria").value);
+    formData.append("temporada", document.getElementById("temporada").value);
+
+    const imagen = document.getElementById("imagen").files[0];
+    if (imagen) {
+        formData.append("imagen", imagen);
+    }
+
+    const res = await fetch("/platos", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await res.json();
+
+    const msg = document.getElementById("mensaje");
+
+    if (res.ok) {
+        msg.style.color = "green";
+        msg.textContent = "Plato creado correctamente";
+
+        setTimeout(() => {
+            window.location.href = "/platos";
+        }, 1000);
+
+    } else {
+        msg.style.color = "red";
+        msg.textContent = data.error || "Error";
+    }
+}
+</script>
+
+</body>
+</html>

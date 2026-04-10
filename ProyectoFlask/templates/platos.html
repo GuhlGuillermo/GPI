@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carta del Restaurante</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            padding: 40px 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* BOTÓN AÑADIR */
+        .add-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px; /* 🔥 ARREGLADO */
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .add-btn:hover {
+            background-color: #a30000;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card h3 {
+            margin: 0;
+        }
+
+        .descripcion {
+            font-size: 14px;
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .precio {
+            font-weight: bold;
+            color: #8b0000;
+            font-size: 18px;
+        }
+
+        .extra {
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+
+<button class="add-btn" onclick="window.location.href='/add_plato_page'">
+    ➕ Añadir Plato
+</button>
+
+<h1>🍛 Carta del Restaurante</h1>
+
+<div class="grid" id="gridPlatos"></div>
+
+<script>
+
+async function cargarPlatos() {
+    try {
+        const res = await fetch("/platos");
+        const data = await res.json();
+
+        console.log(data); // 👈 DEBUG
+
+        const grid = document.getElementById("gridPlatos");
+        grid.innerHTML = "";
+
+        data.forEach(p => {
+
+            const imagen = p.imagen 
+                ? `/static/images/${p.imagen}` 
+                : `https://source.unsplash.com/400x300/?food,${p.nombre}`;
+
+            const card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+                <img src="${imagen}" />
+
+                <div class="card-content">
+                    <h3>${p.nombre}</h3>
+                    <p class="descripcion">${p.descripcion || ""}</p>
+                    <p class="precio">${p.precio}€</p>
+                    <p class="extra">${p.categoria} | ${p.temporada}</p>
+                </div>
+            `;
+
+            grid.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Error cargando platos:", error);
+    }
+}
+
+cargarPlatos();
+
+</script>
+
+</body>
+</html>

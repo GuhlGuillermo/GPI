@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menú Diario</title>
+</head>
+<body>
+
+<h1>📅 Menú</h1>
+
+<input id="fecha" type="date">
+<button onclick="verMenu()">Buscar</button>
+
+<pre id="menuResultado"></pre>
+
+<script>
+async function verMenu() {
+    const fecha = document.getElementById("fecha").value;
+
+    const res = await fetch(`/menus/${fecha}`);
+    const data = await res.json();
+
+    document.getElementById("menuResultado").textContent =
+        JSON.stringify(data, null, 2);
+}
+</script>
+
+</body>
+</html>
