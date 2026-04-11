@@ -3,6 +3,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from src.interfaces.api.order_routes import order_bp
 from src.interfaces.api.auth_routes import auth_bp
+from src.interfaces.api.dish_routes import dish_bp
+from src.interfaces.api.menu_routes import menu_bp
 
 def create_app():
     """Factory para instanciar el servidor Flask bajo Clean Architecture"""
@@ -17,6 +19,8 @@ def create_app():
     # Registrar Interfaces / Endpoints Modulares (Blueprints)
     app.register_blueprint(order_bp, url_prefix='/api/orders')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(dish_bp, url_prefix='/api/dishes')
+    app.register_blueprint(menu_bp, url_prefix='/api/menu')
 
     @app.route('/health', methods=['GET'])
     def health_check():

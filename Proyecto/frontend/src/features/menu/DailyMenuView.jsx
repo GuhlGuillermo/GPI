@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const DailyMenuView = () => {
+const DailyMenuView = ({ onAdd }) => {
   const [selectedStarter, setSelectedStarter] = useState('');
   const [selectedMain, setSelectedMain] = useState('');
   const [selectedDessert, setSelectedDessert] = useState('');
@@ -8,6 +8,24 @@ const DailyMenuView = () => {
   // Condición simulada: si es Sábado, o pasadas las 16h, no debería ni salir. 
   // En React llamaríamos a backend para ver si existe un menú. Simulamos que sí existe uno.
   const isMenuSelected = selectedStarter && selectedMain && selectedDessert;
+  const handleAddMenu = () => {
+    // Creamos el objeto que representa el menú completo para el carrito
+    const menuSelection = {
+      dish_id: 'MENU-DIARIO', // ID genérico para identificar que es un menú
+      name: `Menú: ${selectedStarter}, ${selectedMain} y ${selectedDessert}`,
+      snapshot_price: 15.00, // Precio fijo por REQ 2 
+      quantity: 1
+    };
+
+    // Llamamos a la función onAdd que viene de App.jsx
+    onAdd(menuSelection);
+
+    // Feedback para el usuario y limpiar selección
+    alert("¡Menú añadido con éxito!");
+    setSelectedStarter('');
+    setSelectedMain('');
+    setSelectedDessert('');
+  };
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in">
@@ -90,6 +108,7 @@ const DailyMenuView = () => {
              <span className="text-white font-bold text-2xl font-display">15.00€</span>
          </div>
          <button 
+           onClick={handleAddMenu}
            className="w-full md:w-auto bg-brand-accent hover:bg-yellow-500 disabled:opacity-50 disabled:bg-slate-700 text-slate-900 disabled:text-slate-400 px-10 py-4 rounded-xl font-bold text-lg transition-colors cursor-pointer"
            disabled={!isMenuSelected}
          >

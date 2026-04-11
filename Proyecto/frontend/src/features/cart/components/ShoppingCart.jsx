@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { apiClient } from '../../../core/api';
 
-const ShoppingCart = () => {
-  const [items, setItems] = useState([
-    { id: '1', dish_id: 'D1', name: 'Momo de Pollo', snapshot_price: 6.50, quantity: 2 },
-    { id: '2', dish_id: 'D2', name: 'Tikka Masala', snapshot_price: 14.50, quantity: 1 }
-  ]);
+const ShoppingCart = ({ items, setItems }) => {
   const [cardNumber, setCardNumber] = useState('');
   
   // Estados de Red (UI Feedback State)

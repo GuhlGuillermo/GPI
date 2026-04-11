@@ -1,7 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
 from datetime import datetime
+from enum import Enum
 
+class UserRole(Enum):
+    CLIENT = "CLIENT"
+    CHEF = "CHEF"
+    DELIVERY = "DELIVERY"
+    OWNER = "OWNER"
+    
 @dataclass
 class DailyMenuSelection:
     menu_date: str
@@ -36,8 +43,31 @@ class Order:
     status: str = "RECEIVED"
     created_at: datetime = field(default_factory=datetime.now)
 
+    def can_be_modified(self) -> bool:
+        """Verifica si han pasado menos de 10 minutos desde la creación [cite: 34]"""
+        from datetime import datetime, timedelta
+        limit = self.created_at + timedelta(minutes=10)
+        return datetime.now() <= limit
+
 @dataclass
 class User:
     id: str
-    role: str # CLIENT, CHEF...
+    role: UserRole  # Cliente, Chef, Delivery o Owner
     historial_gasto_total: float = 0.0
+
+@dataclass
+class Dish:
+    id: str
+    name: str
+    description: str
+    price: float
+    category: str  # entrantes, ensaladas, tandoori, bebidas, etc.
+    season: str    # primavera, verano, otoño, invierno o todo el año
+
+@dataclass
+class DailyMenuConfig:
+    date: str  # Formato "YYYY-MM-DD"
+    starters: List[str]  # Exactamente 3 nombres/IDs de platos 
+    mains: List[str]     # Exactamente 3 nombres/IDs de platos 
+    desserts: List[str]  # Exactamente 2 nombres/IDs de platos 
+    price: float = 15.0  # Precio fijo

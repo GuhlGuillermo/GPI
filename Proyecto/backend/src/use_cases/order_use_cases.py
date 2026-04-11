@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from src.domain.models import Order, OrderPricing
-from src.domain.exceptions import OutOfHoursException, MinimumOrderException, InvalidPaymentException
+from src.domain.exceptions import BusinessRuleException, OutOfHoursException, MinimumOrderException, InvalidPaymentException
 
 class CreateOrderUseCase:
     """
@@ -64,3 +64,27 @@ class CreateOrderUseCase:
             self.user_repo.save(user)
 
         return order
+
+class CancelOrderUseCase:
+    def __init__(self, order_repo):
+        self.order_repo = order_repo
+
+    def execute(self, order_id: str):
+        order = self.order_repo.get_by_id(order_id)
+        if not order:
+            raise Exception("Pedido no encontrado")
+            
+        if not order.can_be_modified():
+            # Error si pasan más de 10 minutos [cite: 35]
+            raise BusinessRuleException("No se puede cancelar el pedido: han pasado más de 10 minutos.")
+            
+        order.status = "CANCELLED"
+        self.order_repo.save(order)
+
+class GetDailyTurnoverUseCase:
+    def __init__(self, order_repo):
+        self.order_repo = order_repo
+
+    def execute(self, date_str: str) -> float:
+        # Aquí podrías añadir validaciones, por ejemplo, que la fecha sea válida
+        return self.order_repo.get_daily_turnover(date_str)

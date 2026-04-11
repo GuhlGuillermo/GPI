@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from src.use_cases.order_use_cases import CreateOrderUseCase
+from src.use_cases.order_use_cases import CreateOrderUseCase, GetDailyTurnoverUseCase
 from src.infrastructure.database.mongo_repos import MongoOrderRepository, MongoUserRepository
 from src.domain.exceptions import BusinessRuleException
 
@@ -41,3 +41,22 @@ def create_order():
     except Exception as e:
         # Fallos internos catastróficos del sistema (BD caída, etc)
         return jsonify({"error": "Error interno del servidor.", "details": str(e)}), 500
+    
+@order_bp.route('/turnover/<date>', methods=['GET'])
+def get_turnover(date):
+    """
+    Ruta para que el dueño consulte la facturación de un día.
+    Ejemplo de uso: /api/orders/turnover/2026-04-11
+    """
+    order_repo = MongoOrderRepository()
+    use_case = GetDailyTurnoverUseCase(order_repo)
+    
+    try:
+        total = use_case.execute(date)
+        return jsonify({
+            "date": date,
+            "total_turnover": total,
+            "currency": "EUR"
+        }), 200
+    except ValueError:
+        return jsonify({"error": "Formato de fecha inválido. Use YYYY-MM-DD"}), 400
