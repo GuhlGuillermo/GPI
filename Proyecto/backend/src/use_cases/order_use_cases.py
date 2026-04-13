@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
-from src.domain.models import Order, OrderPricing
-from src.domain.exceptions import BusinessRuleException, OutOfHoursException, MinimumOrderException, InvalidPaymentException
+from src.domain.models import Order, OrderItem
+from src.domain.exceptions import OutOfHoursException, MinimumOrderException, InvalidPaymentException
 
 class CreateOrderUseCase:
     """
@@ -12,79 +12,77 @@ class CreateOrderUseCase:
     4. Fidelización: Descuento de 5€ por cada 100€ de historial.
     """
     def __init__(self, order_repo, user_repo):
-        # La inyección de dependencias nos aísla de Mongo
         self.order_repo = order_repo
         self.user_repo = user_repo
 
-    def execute(self, user_id: str, items_data: list, credit_card: str) -> Order:
-        # 1. Validación de Horario (Se asume la hora actual del servidor/restaurante)
+    def execute(self, user_id: str, items_data: list, credit_card: str, dir_entrega: str = "", nombre: str = "", email: str = "") -> Order:
         now = datetime.now()
         is_weekend = now.weekday() >= 5
         if is_weekend or not (13 <= now.hour < 16):
             raise OutOfHoursException("Solo se aceptan pedidos de lunes a viernes entre las 13:00 y las 16:00.")
 
-        # 2. Validación Fake Tarjeta
         if not credit_card.isdigit() or len(credit_card) != 16:
             raise InvalidPaymentException("La tarjeta debe contener exactamente 16 dígitos numéricos.")
 
-        # 3. Construcción y cálculo del subtotal (En un caso real los items se verificarían contra el CatalogoRepo)
-        subtotal = sum([item['snapshot_price'] * item['quantity'] for item in items_data])
+        subtotal = sum([item['precio_plato'] * item['cantidad'] for item in items_data])
         
-        # 4. Importe mínimo
         if subtotal < 15.00:
             raise MinimumOrderException(f"El importe mínimo es de 15€. El carrito actual es de {subtotal}€.")
 
-        # 5. Fidelización de clientes registrados
         discount = 0.0
-        user = self.user_repo.get_by_id(user_id) if user_id else None
-        if user and user.role == "CLIENT":
-            # Calcular tramos de 100€ -> 5€ cada uno
-            discount = (user.historial_gasto_total // 100) * 5.0
-            
-            # (Limitamos que el descuento no haga el pedido gratis por lógica comercial)
-            discount = min(discount, subtotal - 0.01)
-
-        # Montaje final de la Entidad
-        pricing = OrderPricing(subtotal=subtotal, loyalty_discount_applied=discount)
         
+        # Lógica de autocompletado de Usuario por email o creación silenciosa
+        user = None
+        if email:
+            user = self.user_repo.get_by_email(email)
+            if not user:
+                from src.domain.models import User
+                user = User(
+                    id_usuario=str(uuid.uuid4()),
+                    nombre=nombre,
+                    email=email,
+                    rol="CLIENT"
+                )
+                self.user_repo.save(user) # Persistimos el nuevo invitado
+                
+        # Si fue proporcionado un ID (por ejemplo token autenticado más adelante) pero la lógica por email no operó
+        if not user and user_id and user_id != "invitado":
+            user = self.user_repo.get_by_id(user_id)
+
+        if user and user.rol == "CLIENT":
+            discount = (user.gasto_total // 100) * 5.0
+            discount = min(discount, subtotal - 0.01)
+            user.es_cliente_habitual = user.gasto_total > 50.0
+
+        importe_final = max(0.0, subtotal - discount)
+        
+        order_items = [
+            OrderItem(
+                id_plato=item['id_plato'],
+                nombre_plato=item['nombre_plato'],
+                precio_plato=item['precio_plato'],
+                cantidad=item['cantidad']
+            ) for item in items_data
+        ]
+
+        # Asegurar que el id_usuario en el ticket sea el real (si creamos la cuenta en el aire)
+        final_user_id = user.id_usuario if user else user_id
+
         order = Order(
-            id=str(uuid.uuid4()),
-            user_id=user_id,
-            items=items_data, # Aquí los convertiríamos a dataclass OrderItem
-            pricing=pricing,
-            status="RECEIVED"
+            id_pedido=str(uuid.uuid4()),
+            id_usuario=final_user_id,
+            items=order_items,
+            importe_total=importe_final,
+            estado="RECIBIDO",
+            dir_entrega=dir_entrega,
+            hora_entrega=datetime.now(),
+            info_pago="TARJETA"
         )
 
-        # Usar la infraestructura inyectada para guardar
         self.order_repo.save(order)
         
-        # (Opcional) Guardar gastos del usuario para el futuro si así corresponde
         if user:
-            user.historial_gasto_total += order.pricing.total
+            user.gasto_total += order.importe_total
             self.user_repo.save(user)
 
         return order
-
-class CancelOrderUseCase:
-    def __init__(self, order_repo):
-        self.order_repo = order_repo
-
-    def execute(self, order_id: str):
-        order = self.order_repo.get_by_id(order_id)
-        if not order:
-            raise Exception("Pedido no encontrado")
-            
-        if not order.can_be_modified():
-            # Error si pasan más de 10 minutos [cite: 35]
-            raise BusinessRuleException("No se puede cancelar el pedido: han pasado más de 10 minutos.")
-            
-        order.status = "CANCELLED"
-        self.order_repo.save(order)
-
-class GetDailyTurnoverUseCase:
-    def __init__(self, order_repo):
-        self.order_repo = order_repo
-
-    def execute(self, date_str: str) -> float:
-        # Aquí podrías añadir validaciones, por ejemplo, que la fecha sea válida
-        return self.order_repo.get_daily_turnover(date_str)

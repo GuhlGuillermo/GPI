@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 
 import HomeView from './features/home/HomeView';
@@ -31,20 +31,6 @@ const Navbar = () => {
 }
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
-
-  const addToCart = (product) => {
-    setCartItems(prev => {
-      const existing = prev.find(item => item.dish_id === product.dish_id);
-      if (existing) {
-        return prev.map(item => 
-          item.dish_id === product.dish_id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...prev, { ...product, id: Date.now().toString(), quantity: 1 }];
-    });
-  };
-
   return (
     <Router>
       <div className="min-h-screen bg-slate-50 flex flex-col">
@@ -52,18 +38,10 @@ function App() {
         <main className="max-w-7xl mx-auto px-4 py-12 w-full flex-grow">
           <Routes>
             <Route path="/" element={<HomeView />} />
-            {/* [MODIFICADO] Pasamos el carrito y la función de añadir */}
-            <Route path="/carta" element={
-              <CartaView 
-                cartItems={cartItems} 
-                setCartItems={setCartItems} 
-                onAdd={addToCart} 
-              />
-            } />
-            {/* [MODIFICADO] Pasamos la función al menú diario */}
-            <Route path="/menu-diario" element={
-              <DailyMenuView onAdd={addToCart} />
-            } />
+            <Route path="/carta" element={<CartaView />} />
+            <Route path="/menu-diario" element={<DailyMenuView />} />
+            
+            {/* Oculta del menú, accesible solo por URL */}
             <Route path="/chef-admin/*" element={<ChefLogin />} />
           </Routes>
         </main>

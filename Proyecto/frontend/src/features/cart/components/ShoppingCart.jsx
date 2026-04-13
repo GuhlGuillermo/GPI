@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import { apiClient } from '../../../core/api';
 
-const ShoppingCart = ({ items, setItems }) => {
+const ShoppingCart = () => {
+  const [items, setItems] = useState([]);
   const [cardNumber, setCardNumber] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [email, setEmail] = useState('');
+  const [dirEntrega, setDirEntrega] = useState('');
   
   // Estados de Red (UI Feedback State)
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   
-  const subtotal = items.reduce((acc, current) => acc + (current.snapshot_price * current.quantity), 0);
+  const subtotal = items.reduce((acc, current) => acc + (current.precio_plato * current.cantidad), 0);
   const isMinimumReached = subtotal >= 15.00;
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-    if (!isMinimumReached || cardNumber.length !== 16) return;
+    if (!isMinimumReached || cardNumber.length !== 16 || !nombre || !email || !dirEntrega) return;
 
     setErrorMsg('');
     setSuccessMsg('');
@@ -23,15 +27,21 @@ const ShoppingCart = ({ items, setItems }) => {
     try {
       // POST al adaptador Flask Blueprint 
       const response = await apiClient.post('/orders/', {
-        user_id: "invitado", // Temporal (luego ID vendrá del token de autenticación)
+        id_usuario: "invitado", // Temporal (luego ID vendrá del token de autenticación)
         items: items,
-        credit_card: cardNumber
+        credit_card: cardNumber,
+        nombre: nombre,
+        email: email,
+        dir_entrega: dirEntrega
       });
       
       // La API devolvió HTTP Status verde (201 OK)
-      setSuccessMsg(`¡Hecho! Ticket #${response.data.order_id.substring(0,8)}. Cargado: ${response.data.total_charged.toFixed(2)}€`);
+      setSuccessMsg(`¡Hecho! Ticket #${response.data.id_pedido.substring(0,8)}. Cargado: ${response.data.importe_total.toFixed(2)}€`);
       setItems([]); // Vaciar carrito de compras porque ya se pagó con éxito
       setCardNumber('');
+      setNombre('');
+      setEmail('');
+      setDirEntrega('');
 
     } catch (err) {
       // Flask lanzó Excepciones de BusinessRuleException (HTTP 400x)
@@ -69,19 +79,19 @@ const ShoppingCart = ({ items, setItems }) => {
       {/* Listado */}
       <div className="flex-1 overflow-y-auto space-y-4 mb-6 pr-2">
         {items.map((item) => (
-          <div key={item.id} className="flex justify-between items-center group">
+          <div key={item.id_plato} className="flex justify-between items-center group">
             <div>
-              <p className="font-semibold text-slate-700">{item.name}</p>
+              <p className="font-semibold text-slate-700">{item.nombre_plato}</p>
               <p className="text-sm text-slate-400">
-                {item.quantity} x {item.snapshot_price.toFixed(2)}€
+                {item.cantidad} x {item.precio_plato.toFixed(2)}€
               </p>
             </div>
             <div className="flex items-center gap-4">
               <span className="font-bold text-slate-800">
-                {(item.snapshot_price * item.quantity).toFixed(2)}€
+                {(item.precio_plato * item.cantidad).toFixed(2)}€
               </span>
               <button 
-                onClick={() => setItems(items.filter(i => i.id !== item.id))}
+                onClick={() => setItems(items.filter(i => i.id_plato !== item.id_plato))}
                 className="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none"
               >
                 ✕
@@ -114,6 +124,45 @@ const ShoppingCart = ({ items, setItems }) => {
       {/* Checkout Form */}
       <form onSubmit={handleCheckout} className="space-y-4">
         <div>
+          <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Nombre Completo</label>
+          <input 
+            type="text" 
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-dark transition-colors"
+            placeholder="Ana García"
+            required
+            disabled={loading || items.length === 0}
+          />
+        </div>
+
+        <div>
+          <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Correo Electrónico</label>
+          <input 
+            type="email" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-dark transition-colors"
+            placeholder="ana@ejemplo.com"
+            required
+            disabled={loading || items.length === 0}
+          />
+        </div>
+
+        <div>
+          <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Dirección de Entrega</label>
+          <input 
+            type="text" 
+            value={dirEntrega}
+            onChange={(e) => setDirEntrega(e.target.value)}
+            className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-dark transition-colors"
+            placeholder="Calle Gran Vía 12, P1"
+            required
+            disabled={loading || items.length === 0}
+          />
+        </div>
+
+        <div>
           <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Acreditación de Pago (Tarjeta)</label>
           <input 
             type="text" 
@@ -136,7 +185,7 @@ const ShoppingCart = ({ items, setItems }) => {
 
         <button 
           type="submit" 
-          disabled={!isMinimumReached || cardNumber.length !== 16 || loading || items.length === 0}
+          disabled={!isMinimumReached || cardNumber.length !== 16 || !nombre || !email || !dirEntrega || loading || items.length === 0}
           className="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-4 rounded-xl shadow-xl transition-all relative overflow-hidden"
         >
           {loading ? (

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import ChefDishDashboard from '../admin/ChefDishDashboard';
+import { apiClient } from '../../core/api';
 
 const ChefLogin = () => {
   const [secret, setSecret] = useState('');
@@ -9,8 +12,7 @@ const ChefLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Mocked connect to true endpoint. Si falla lo mockeamos para demo frontend.
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await apiClient.post('/auth/login', {
         role: "CHEF",
         secret_key: secret
       });
@@ -29,22 +31,35 @@ const ChefLogin = () => {
 
   if (token) {
     return (
-      <div className="animate-fade-in p-8 w-full max-w-4xl mx-auto mt-20">
+      <div className="animate-fade-in p-8 w-full max-w-6xl mx-auto mt-20">
+
         <div className="flex justify-between items-center bg-slate-900 border border-slate-700 p-6 rounded-2xl mb-8 shadow-2xl">
            <div>
              <h2 className="text-3xl font-display font-black text-brand-accent mb-2">Panel Maestro - Chef</h2>
              <span className="text-green-400 text-sm font-mono bg-green-400/10 px-2 py-1 rounded">✔ Sesión Verificada (JWT)</span>
            </div>
-           <button onClick={handleLogout} className="text-slate-400 hover:text-white underline text-sm">Cerrar Sesión Segura</button>
+           <div className="flex gap-6 items-center">
+             <Link to="/chef-admin/platos" className="text-white font-bold hover:text-brand-primary transition">🍽️ Catálogo de Platos</Link>
+             <Link to="/chef-admin/menus" className="text-white font-bold hover:text-brand-primary transition">📅 Menú Diario</Link>
+             <button onClick={handleLogout} className="text-slate-400 hover:text-white underline text-sm ml-4 border-l border-slate-600 pl-4">Cerrar Sesión Segura</button>
+           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-8">
-            <div className="border border-dashed border-slate-300 p-12 text-center rounded-2xl bg-white/50 text-slate-500">
-                Lógica CRUD Platos (Próximo Sprint)
-            </div>
-            <div className="border border-dashed border-slate-300 p-12 text-center rounded-2xl bg-white/50 text-slate-500">
-                Gestión Menú (Próximo Sprint)
-            </div>
+        <div className="mt-4">
+            <Routes>
+                <Route path="/" element={<Navigate to="platos" replace />} />
+                <Route path="platos" element={
+                    <div className="bg-white rounded-2xl">
+                        <ChefDishDashboard />
+                    </div>
+                } />
+                <Route path="menus" element={
+                    <div className="bg-white p-16 text-center rounded-2xl border border-slate-200 mt-8 shadow-sm">
+                        <h3 className="text-2xl font-bold mb-4 text-slate-800">Constructor de Menús Diarios</h3>
+                        <p className="text-slate-500 max-w-md mx-auto">Selecciona qué platos de tu catálogo estarán disponibles hoy en la ruleta del cliente. (Implementación inminente)</p>
+                    </div>
+                } />
+            </Routes>
         </div>
       </div>
     );
