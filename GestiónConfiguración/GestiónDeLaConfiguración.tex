@@ -51,7 +51,7 @@
 \newpage
 
 \section{Introducción}
-El presente documento define la estrategia de Gestión de la Configuración Software (GCS) para el sistema de gestión del restaurante "Sabor del Himalaya". El objetivo primordial es asegurar la integridad del código fuente, la base de datos MongoDB y la infraestructura Docker a medida que el proyecto evoluciona para evitar el caos.
+El presente documento define la estrategia de Gestión de la Configuración Software (GCS) para el sistema de gestión del restaurante "Sabor del Himalaya". 
 
 \section{Identificación de la Configuración}
 \sloppy
@@ -95,7 +95,7 @@ Esta fase consiste en identificar y documentar los Elementos de Configuración (
         \end{itemize}
 \end{itemize}
 
-El versionado seguirá el estándar \textbf{SemVer (Major.Minor.Patch)}. Actualmente, el proyecto se encuentra en la versión \texttt{1.1.0}, lo que indica que se han añadido funcionalidades compatibles con la versión anterior (Ciclo 2: Implementación del REQ 4) sin romper la compatibilidad de la API base.
+El versionado seguirá el estándar \textbf{SemVer (Major.Minor.Patch)}.
 
 \subsection{Definición de la línea base del sistema}
 
@@ -124,45 +124,44 @@ Para garantizar la integridad y la capacidad de recuperación del sistema ante f
 \small
 \begin{tabularx}{\textwidth}{@{}l l l l L@{}}
 \toprule
-\textbf{Nombre de EC} & \textbf{Acrón.} & \textbf{Propietario} & \textbf{Fichero} & \textbf{Línea Base / Copia} \\ \midrule
+\textbf{Nombre de EC} & \textbf{Acrónimo} & \textbf{Propietario} & \textbf{Fichero} & \textbf{Copia de Seguridad} \\ \midrule
 
 \rowcolor{gray!15} \multicolumn{5}{l}{\textbf{Código Fuente - Backend}} \\
-Punto entrada servidor & APP-BE & Guillermo Guhl & SH-SRC-BE-APP & Ciclo 2 / GitHub \\
-Entidades de dominio & MODELS & Guillermo Guhl & SH-SRC-BE-MODELS & Ciclo 2 / GitHub \\
-Persistencia MongoDB & REPOS & Guillermo Guhl & SH-SRC-BE-REPOS & Ciclo 2 / GitHub \\
-Lógica de negocio & LOGIC & Guillermo Guhl & SH-SRC-BE-LOGIC & Ciclo 2 / GitHub \\
-Rutas y API REST & API & Guillermo Guhl & SH-SRC-BE-API & Ciclo 2 / GitHub \\
+Punto entrada servidor & APP-BE & Guillermo Guhl & SH-SRC-BE-APP & GitHub \\
+Entidades de dominio & MODELS & Guillermo Guhl & SH-SRC-BE-MODELS & GitHub \\
+Persistencia MongoDB & REPOS & Guillermo Guhl & SH-SRC-BE-REPOS & GitHub \\
+Lógica de negocio & LOGIC & Guillermo Guhl & SH-SRC-BE-LOGIC &  GitHub \\
+Rutas y API REST & API & Guillermo Guhl & SH-SRC-BE-API & GitHub \\
 
 \midrule
 \rowcolor{gray!15} \multicolumn{5}{l}{\textbf{Código Fuente - Frontend}} \\
-Componente React Principal & APP-FE & Daniel Gomarín & SH-SRC-FE-APP & Ciclo 2 / GitHub \\
-Vistas de navegación & VIEWS & Daniel Gomarín & SH-SRC-FE-VIEWS & Ciclo 2 / GitHub \\
-Componentes Reutilizables & COMP & Daniel Gomarín & SH-SRC-FE-COMP & Ciclo 2 / GitHub \\
+Componente React Principal & APP-FE & Daniel Gomarín & SH-SRC-FE-APP & GitHub \\
+Vistas de navegación & VIEWS & Daniel Gomarín & SH-SRC-FE-VIEWS & GitHub \\
+Componentes Reutilizables & COMP & Daniel Gomarín & SH-SRC-FE-COMP & GitHub \\
 
 \midrule
 \rowcolor{gray!15} \multicolumn{5}{l}{\textbf{Infraestructura y Entorno}} \\
-Orquestación Docker & D-COMP & Marcos Romero & SH-INF-DOCKER-COMP & Ciclo 1 / GitHub \\
-Definición Imagen BE & D-FILE & Marcos Romero & SH-INF-DOCKER-FILE & Ciclo 1 / GitHub \\
+Orquestación Docker & D-COMP & Marcos Romero & SH-INF-DOCKER-COMP & GitHub \\
+Definición Imagen BE & D-FILE & Marcos Romero & SH-INF-DOCKER-FILE & GitHub \\
 
 \midrule
 \rowcolor{gray!15} \multicolumn{5}{l}{\textbf{Documentos de Gestión}} \\
-Ciclo de Vida & CV & Javier Pozuelo & SH-DOC-CV & Estrategia / Drive-GitHub \\
-Estimación y Estrategia & EE & Javier Pozuelo & SH-DOC-EE & Estrategia / Drive-GitHub \\
-Planificación Ciclo 1 & C1 & Carlos Sobrino & SH-DOC-C1 & Planif. / Drive-GitHub \\
-Monitorización Ciclo 1 & M1 & Carlos Sobrino & SH-DOC-M1 & Seguim. / Drive-GitHub \\
-Presentación Ciclo 1 & P1 & Carlos Sobrino & SH-DOC-P1 & Cierre / Drive-GitHub \\
-Planificación Ciclo 2 & C2 & Carlos Sobrino & SH-DOC-C2 & Planif. / Drive-GitHub \\
-Monitorización Ciclo 2 & M2 & Carlos Sobrino & SH-DOC-M2 & Seguim. / Drive-GitHub \\
-Presentación Ciclo 2 & P2 & Carlos Sobrino & SH-DOC-P2 & Cierre / Drive-GitHub \\
-Gestión de la Calidad & GC & Javier Pozuelo & SH-DOC-GC & Estrategia / Drive-GitHub \\
-Plan de Gestión Conf. & PGCS & Javier Pozuelo & SH-DOC-PGCS & Estrategia / Drive-GitHub \\
+Ciclo de Vida & CV & Javier Pozuelo & SH-DOC-CV & Estrategia / GitHub \\
+Estimación y Estrategia & EE & Javier Pozuelo & SH-DOC-EE & Estrategia / GitHub \\
+Planificación Ciclo 1 & C1 & Carlos Sobrino & SH-DOC-C1 & Planif. / GitHub \\
+Monitorización Ciclo 1 & M1 & Carlos Sobrino & SH-DOC-M1 & Seguim. / GitHub \\
+Presentación Ciclo 1 & P1 & Carlos Sobrino & SH-DOC-P1 & Cierre / GitHub \\
+Planificación Ciclo 2 & C2 & Carlos Sobrino & SH-DOC-C2 & Planif. / GitHub \\
+Monitorización Ciclo 2 & M2 & Carlos Sobrino & SH-DOC-M2 & Seguim. / GitHub \\
+Presentación Ciclo 2 & P2 & Carlos Sobrino & SH-DOC-P2 & Cierre / GitHub \\
+Gestión de la Calidad & GC & Javier Pozuelo & SH-DOC-GC & Estrategia / GitHub \\
+Plan de Gestión Conf. & PGCS & Javier Pozuelo & SH-DOC-PGCS & Estrategia / GitHub \\
 \bottomrule
 \end{tabularx}
 \caption{Resumen completo de Elementos de Configuración y su ubicación.}
 \end{table}
 
 \section{Control de la Configuración}
-El Comité de Control de Configuración (CCC) supervisará los cambios para asegurar la trazabilidad[cite: 112, 147]. 
 
 \subsection{Comité de Control de la Configuración (CCC)}
 
@@ -187,7 +186,7 @@ Javier Pozuelo Ruíz & Integrante del CCC & Actúa como Lector, encargado de ver
 Cabe destacar que, aunque los roles de Integrante del CCC son opcionales según la metodología general, el equipo ha considerado necesaria su inclusión para fortalecer el proceso de inspección y asegurar que cada Elemento de Configuración sea validado desde múltiples perspectivas antes de su aprobación final.
 
 \subsection{Peticiones de cambios a la configuración}
-Durante el transcurso del proyecto, se han generado las siguientes peticiones de cambio que afectan directamente a la planificación y estructura del Ciclo 2:\begin{itemize}
+Durante el transcurso del proyecto, se han generado las siguientes peticiones de cambio que afectan directamente a la planificación y estructura del proyecto:\begin{itemize}
     \item \textbf{PC-001 (23/03/2026):} Solicitada durante el Ciclo 1 para reordenar la implementación de requisitos. Se adelantó el REQ 3 al primer ciclo y se desplazó el REQ 4 al Ciclo 2, además de incorporar el REQ 9, con el fin de asegurar un orden de desarrollo lógico.
     \item \textbf{PC-002 (20/04/2026):} Iniciada para definir formalmente la estructura del CCC y los roles de gestión de configuración. Se asignaron funciones específicas a los cinco integrantes (Inspector, Secretario, Responsable de Desarrollo, Moderador/Calidad y Lector) para garantizar el control del software.
     \item \textbf{PC-003 (20/04/2026):} Modificación del alcance técnico del Ciclo 2 donde se decidió no implementar el REQ 6, sustituyéndolo por el REQ 8. Esta decisión se tomó para ajustar la carga de trabajo al tiempo real disponible del equipo.
@@ -198,9 +197,9 @@ Durante el transcurso del proyecto, se han generado las siguientes peticiones de
 Durante el transcurso del proyecto, se han generado las siguientes peticiones de cambio oficiales para adaptar la planificación y la estructura del equipo a las necesidades del Ciclo 2:
 
 \begin{itemize}
-    \item \textbf{PC-001 (23/03/2026):} Solicitada para reordenar la implementación de requisitos. Se adelantó el **REQ 3** al primer ciclo y se desplazó el **REQ 4** al Ciclo 2, incorporando además el **REQ 9**[cite: 2].
-    \item \textbf{PC-002 (20/04/2026):} Definición formal de la estructura del CCC y asignación de roles GCS (Inspector, Secretario, Responsable de Desarrollo, Moderador y Lector) para cada integrante del equipo[cite: 4].
-    \item \textbf{PC-003 (20/04/2026):} Modificación del alcance técnico eliminando el **REQ 6** y sustituyéndolo por el **REQ 8** para optimizar el tiempo disponible del equipo[cite: 6].
+    \item \textbf{PC-001 (23/03/2026):} Solicitada para reordenar la implementación de requisitos. Se adelantó el **REQ 3** al primer ciclo y se desplazó el **REQ 4** al Ciclo 2, incorporando además el **REQ 9**.
+    \item \textbf{PC-002 (20/04/2026):} Definición formal de la estructura del CCC y asignación de roles GCS (Inspector, Secretario, Responsable de Desarrollo, Moderador y Lector) para cada integrante del equipo.
+    \item \textbf{PC-003 (20/04/2026):} Modificación del alcance técnico eliminando el **REQ 6** y sustituyéndolo por el **REQ 8** para optimizar el tiempo disponible del equipo.
 \end{itemize}
 
 \begin{table}[H]

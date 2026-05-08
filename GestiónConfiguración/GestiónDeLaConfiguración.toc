@@ -4,10 +4,10 @@
 \contentsline {subsection}{\numberline {2.1}Definición de la línea base del sistema}{3}{}%
 \contentsline {subsection}{\numberline {2.2}Procedimientos de copias de seguridad}{3}{}%
 \contentsline {subsection}{\numberline {2.3}Tabla Resumen de la Configuración}{4}{}%
-\contentsline {section}{\numberline {3}Control de la Configuración}{5}{}%
-\contentsline {subsection}{\numberline {3.1}Comité de Control de la Configuración (CCC)}{5}{}%
+\contentsline {section}{\numberline {3}Control de la Configuración}{4}{}%
+\contentsline {subsection}{\numberline {3.1}Comité de Control de la Configuración (CCC)}{4}{}%
 \contentsline {subsection}{\numberline {3.2}Peticiones de cambios a la configuración}{5}{}%
-\contentsline {subsection}{\numberline {3.3}Peticiones de cambios a la configuración}{6}{}%
+\contentsline {subsection}{\numberline {3.3}Peticiones de cambios a la configuración}{5}{}%
 \contentsline {section}{\numberline {4}Informes de estado de configuración}{6}{}%
 \contentsline {subsection}{\numberline {4.1}Resumen Consolidado de Informes (Semanas 2-8)}{6}{}%
 \contentsline {subsection}{\numberline {4.2}Historial de versiones}{6}{}%
