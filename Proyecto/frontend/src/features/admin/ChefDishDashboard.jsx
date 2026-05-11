@@ -8,7 +8,8 @@ const ChefDishDashboard = () => {
     nombre_plato: '',
     descripcion: '',
     precio_plato: '',
-    categoria: 'ENTRANTE'
+    categoria: 'ENTRANTE',
+    visibilidad: 'AMBOS'
   });
   const [editingDishId, setEditingDishId] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -45,6 +46,7 @@ const ChefDishDashboard = () => {
       data.append('descripcion', formData.descripcion);
       data.append('precio_plato', formData.precio_plato);
       data.append('categoria', formData.categoria);
+      data.append('visibilidad', formData.visibilidad);
       if (imageFile) {
         data.append('image', imageFile);
       }
@@ -75,14 +77,15 @@ const ChefDishDashboard = () => {
       nombre_plato: dish.nombre_plato,
       descripcion: dish.descripcion || '',
       precio_plato: dish.precio_plato,
-      categoria: dish.categoria
+      categoria: dish.categoria,
+      visibilidad: dish.visibilidad || 'AMBOS'
     });
     setImageFile(null);
   };
 
   const handleCancelEdit = () => {
     setEditingDishId(null);
-    setFormData({ nombre_plato: '', descripcion: '', precio_plato: '', categoria: 'ENTRANTE' });
+    setFormData({ nombre_plato: '', descripcion: '', precio_plato: '', categoria: 'ENTRANTE', visibilidad: 'AMBOS' });
     setImageFile(null);
   };
 
@@ -130,6 +133,15 @@ const ChefDishDashboard = () => {
                    <option value="POSTRE">Postre</option>
                  </select>
                </div>
+               <div className="flex-1">
+                 <label className="block text-sm font-medium mb-1">Visibilidad</label>
+                 <select name="visibilidad" value={formData.visibilidad} onChange={handleInputChange} className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-primary bg-white">
+                   <option value="AMBOS">En Carta y Menú</option>
+                   <option value="CARTA">Solo en Carta</option>
+                   <option value="DIARIO">Solo Menú Diario</option>
+                   <option value="OCULTO">Oculto / Baja</option>
+                 </select>
+               </div>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Imagen del Plato {editingDishId && '(Opcional para mantener actual)'}</label>
@@ -151,11 +163,14 @@ const ChefDishDashboard = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {dishes.map(d => (
                   <div key={d.id_plato} className="flex gap-4 p-4 border border-slate-200 rounded-xl hover:border-brand-primary transition">
-                    <img src={d.url_imagen || '/default-dish.png'} alt={d.nombre_plato} className="w-20 h-20 object-cover rounded-lg bg-slate-100" onError={(e) => { e.target.onerror = null; e.target.src='/default-dish.png'; }} />
+                    <img src={d.url_imagen || '/default-dish.png'} alt={d.nombre_plato} className="w-20 h-20 object-cover rounded-lg bg-slate-100" onError={(e) => { if (!e.target.src.endsWith('/default-dish.png')) { e.target.src='/default-dish.png'; } }} />
                     <div className="flex-1">
                       <h4 className="font-bold flex items-center justify-between">
                          {d.nombre_plato}
-                         <span className="text-sm font-normal bg-slate-100 px-2 py-0.5 rounded text-slate-600">{d.categoria}</span>
+                         <div>
+                           <span className="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">{d.visibilidad}</span>
+                           <span className="text-sm font-normal bg-slate-100 px-2 py-0.5 rounded text-slate-600">{d.categoria}</span>
+                         </div>
                       </h4>
                       <p className="text-xs text-slate-500 mb-2 line-clamp-1">{d.descripcion}</p>
                       <div className="flex items-center justify-between">

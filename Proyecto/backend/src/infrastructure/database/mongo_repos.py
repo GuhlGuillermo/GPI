@@ -95,7 +95,8 @@ class MongoDishRepository:
             'categoria': dish.categoria,
             'es_de_temporada': dish.es_de_temporada,
             'url_imagen': dish.url_imagen,
-            'activo': dish.activo
+            'activo': dish.activo,
+            'visibilidad': dish.visibilidad
         }
         self.collection.update_one({'_id': dish.id_plato}, {'$set': data}, upsert=True)
         
@@ -110,7 +111,8 @@ class MongoDishRepository:
             categoria=data['categoria'],
             es_de_temporada=data.get('es_de_temporada', False),
             url_imagen=data.get('url_imagen', ''),
-            activo=data.get('activo', True)
+            activo=data.get('activo', True),
+            visibilidad=data.get('visibilidad', 'AMBOS')
         )
         
     def get_all(self, active_only: bool = True) -> List[Dish]:
@@ -125,7 +127,8 @@ class MongoDishRepository:
                 categoria=d['categoria'],
                 es_de_temporada=d.get('es_de_temporada', False),
                 url_imagen=d.get('url_imagen', ''),
-                activo=d.get('activo', True)
+                activo=d.get('activo', True),
+                visibilidad=d.get('visibilidad', 'AMBOS')
             ) for d in cursor
         ]
 
@@ -156,4 +159,40 @@ class MongoMenuRepository:
             platos_principal=data.get('platos_principal', []),
             postres=data.get('postres', []),
             precio_menu=data.get('precio_menu', 0.0)
+        )
+
+from src.domain.models import DailyBilling
+
+class MongoBillingRepository:
+    """Implementación de persistencia para Facturación Diaria"""
+    def __init__(self):
+        self.collection = get_db()['facturacion_diaria']
+        
+    def add_billing_data(self, billing: DailyBilling) -> None:
+        """
+        Suma los importes y pedidos de la instancia al día correspondiente en la DB de forma atómica.
+        Evita sobrescribir lo que otro proceso pudiera haber guardado.
+        """
+        self.collection.update_one(
+            {'fecha': billing.fecha},
+            {
+                '$inc': {
+                    'total_facturado': billing.total_facturado,
+                    'cantidad_pedidos': billing.cantidad_pedidos
+                },
+                '$push': {
+                    'pedidos_refs': { '$each': billing.pedidos_refs }
+                }
+            },
+            upsert=True
+        )
+        
+    def get_by_date(self, fecha: str) -> DailyBilling | None:
+        data = self.collection.find_one({'fecha': fecha})
+        if not data: return None
+        return DailyBilling(
+            fecha=data.get('fecha', fecha),
+            total_facturado=data.get('total_facturado', 0.0),
+            cantidad_pedidos=data.get('cantidad_pedidos', 0),
+            pedidos_refs=data.get('pedidos_refs', [])
         )

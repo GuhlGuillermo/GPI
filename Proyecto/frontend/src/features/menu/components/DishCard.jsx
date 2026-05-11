@@ -9,10 +9,14 @@ const DishCard = ({
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:-translate-y-1 transition-transform duration-300 border border-slate-100 flex flex-col h-full group">
       {/* Etiqueta de Categoría Flotante */}
       <div className="relative h-48 bg-slate-800 overflow-hidden">
-        {/* Placeholder para la imagen real, usamos un gradiente bonito y patrón */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-600/80 to-slate-900/90 mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
-           {dish.url_imagen && <img src={dish.url_imagen} className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50" />}
-        </div>
+        {dish.url_imagen ? (
+          <img src={dish.url_imagen} alt={dish.nombre_plato} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-600/80 to-slate-900/90 group-hover:scale-105 transition-transform duration-500"></div>
+        )}
+        {/* Overlay para asegurar legibilidad del texto */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent pointer-events-none"></div>
+        
         <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-slate-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
           {dish.categoria}
         </span>
@@ -32,14 +36,12 @@ const DishCard = ({
           <span className="text-2xl font-extrabold text-slate-800">
             {dish.precio_plato.toFixed(2)}€
           </span>
-          {/* CARRITO DESHABILITADO
           <button 
             onClick={() => onAddToCart && onAddToCart(dish)}
             className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-semibold py-2 px-5 rounded-xl shadow-lg shadow-amber-500/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
           >
             + Añadir
           </button>
-          */}
         </div>
       </div>
     </div>

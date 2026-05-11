@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 
 import HomeView from './features/home/HomeView';
@@ -31,6 +31,8 @@ const Navbar = () => {
 }
 
 function App() {
+  const [cartItems, setCartItems] = useState([]);
+
   return (
     <Router>
       <div className="min-h-screen bg-slate-50 flex flex-col">
@@ -38,8 +40,8 @@ function App() {
         <main className="max-w-7xl mx-auto px-4 py-12 w-full flex-grow">
           <Routes>
             <Route path="/" element={<HomeView />} />
-            <Route path="/carta" element={<CartaView />} />
-            <Route path="/menu-diario" element={<DailyMenuView />} />
+            <Route path="/carta" element={<CartaView cartItems={cartItems} setCartItems={setCartItems} />} />
+            <Route path="/menu-diario" element={<DailyMenuView cartItems={cartItems} setCartItems={setCartItems} />} />
             
             {/* Oculta del menú, accesible solo por URL */}
             <Route path="/chef-admin/*" element={<ChefLogin />} />

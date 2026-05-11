@@ -85,4 +85,8 @@ class CreateOrderUseCase:
             user.gasto_total += order.importe_total
             self.user_repo.save(user)
 
+        # Volcar al gestor en memoria (Buffer Anti-Saturación)
+        from src.use_cases.billing_buffer import BillingBufferManager
+        BillingBufferManager().add_order(order.id_pedido, order.importe_total)
+
         return order
