@@ -1,0 +1,4 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Explicación del Diagrama de Gantt}{1}{}%
+\contentsline {section}{\numberline {2}Estimación Global de Esfuerzo}{3}{}%
+\contentsline {section}{\numberline {3}Estimación de Esfuerzo por Persona}{3}{}%
