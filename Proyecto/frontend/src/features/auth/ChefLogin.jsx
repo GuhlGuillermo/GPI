@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import ChefDishDashboard from '../admin/ChefDishDashboard';
+import ChefBillingDashboard from '../admin/ChefBillingDashboard';
 import { apiClient } from '../../core/api';
 
 const ChefLogin = () => {
@@ -41,6 +42,7 @@ const ChefLogin = () => {
            <div className="flex gap-6 items-center">
              <Link to="/chef-admin/platos" className="text-white font-bold hover:text-brand-primary transition">🍽️ Catálogo de Platos</Link>
              <Link to="/chef-admin/menus" className="text-white font-bold hover:text-brand-primary transition">📅 Menú Diario</Link>
+             <Link to="/chef-admin/facturacion" className="text-white font-bold hover:text-brand-primary transition">💰 Facturación</Link>
              <button onClick={handleLogout} className="text-slate-400 hover:text-white underline text-sm ml-4 border-l border-slate-600 pl-4">Cerrar Sesión Segura</button>
            </div>
         </div>
@@ -57,6 +59,11 @@ const ChefLogin = () => {
                     <div className="bg-white p-16 text-center rounded-2xl border border-slate-200 mt-8 shadow-sm">
                         <h3 className="text-2xl font-bold mb-4 text-slate-800">Constructor de Menús Diarios</h3>
                         <p className="text-slate-500 max-w-md mx-auto">Selecciona qué platos de tu catálogo estarán disponibles hoy en la ruleta del cliente. (Implementación inminente)</p>
+                    </div>
+                } />
+                <Route path="facturacion" element={
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mt-8">
+                        <ChefBillingDashboard />
                     </div>
                 } />
             </Routes>

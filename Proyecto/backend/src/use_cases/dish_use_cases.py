@@ -16,7 +16,7 @@ class DishUseCases:
             raise ValueError(f"Dish with id {dish_id} not found")
         return dish
 
-    def create_dish(self, nombre_plato: str, descripcion: str, precio_plato: float, categoria: str, url_imagen: str = "") -> Dish:
+    def create_dish(self, nombre_plato: str, descripcion: str, precio_plato: float, categoria: str, url_imagen: str = "", visibilidad: str = "AMBOS") -> Dish:
         dish = Dish(
             id_plato=str(uuid.uuid4()),
             nombre_plato=nombre_plato,
@@ -25,7 +25,8 @@ class DishUseCases:
             categoria=categoria,
             url_imagen=url_imagen,
             activo=True,
-            es_de_temporada=False
+            es_de_temporada=False,
+            visibilidad=visibilidad
         )
         self.dish_repo.save(dish)
         return dish
@@ -40,6 +41,7 @@ class DishUseCases:
         if 'url_imagen' in updates: dish.url_imagen = updates['url_imagen']
         if 'es_de_temporada' in updates: dish.es_de_temporada = updates['es_de_temporada']
         if 'activo' in updates: dish.activo = updates['activo']
+        if 'visibilidad' in updates: dish.visibilidad = updates['visibilidad']
         
         self.dish_repo.save(dish)
         return dish
@@ -48,4 +50,5 @@ class DishUseCases:
         """Borrado lógico del plato"""
         dish = self.get_dish(dish_id)
         dish.activo = False
+        dish.visibilidad = "OCULTO"
         self.dish_repo.save(dish)

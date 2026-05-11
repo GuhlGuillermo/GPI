@@ -4,6 +4,7 @@ from flask_cors import CORS
 from src.interfaces.api.order_routes import order_bp
 from src.interfaces.api.auth_routes import auth_bp
 from src.interfaces.api.dish_routes import dish_bp
+from src.interfaces.api.billing_routes import billing_bp
 
 def create_app():
     """Factory para instanciar el servidor Flask bajo Clean Architecture"""
@@ -19,6 +20,7 @@ def create_app():
     app.register_blueprint(order_bp, url_prefix='/api/orders')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(dish_bp, url_prefix='/api/dishes')
+    app.register_blueprint(billing_bp, url_prefix='/api/billing')
 
 
     @app.route('/health', methods=['GET'])

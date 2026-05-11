@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { apiClient } from '../../../core/api';
 
-const ShoppingCart = () => {
-  const [items, setItems] = useState([]);
+const ShoppingCart = ({ items = [], setItems }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');

@@ -34,7 +34,8 @@ def get_dishes():
         'categoria': d.categoria,
         'es_de_temporada': d.es_de_temporada,
         'url_imagen': d.url_imagen,
-        'activo': d.activo
+        'activo': d.activo,
+        'visibilidad': d.visibilidad
     } for d in dishes]), 200
 
 @dish_bp.route('/', methods=['POST'])
@@ -47,6 +48,7 @@ def create_dish():
     descripcion = request.form.get('descripcion', '')
     precio_plato = float(request.form.get('precio_plato', 0.0))
     categoria = request.form.get('categoria', 'ENTRANTE')
+    visibilidad = request.form.get('visibilidad', 'AMBOS')
     
     url_imagen = ""
     if 'image' in request.files:
@@ -59,7 +61,7 @@ def create_dish():
             url_imagen = f"http://localhost:5000/api/dishes/{filename}"
 
     try:
-        dish = use_cases.create_dish(nombre_plato, descripcion, precio_plato, categoria, url_imagen)
+        dish = use_cases.create_dish(nombre_plato, descripcion, precio_plato, categoria, url_imagen, visibilidad)
         return jsonify({'message': 'Dish created successfully', 'id_plato': dish.id_plato}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -75,6 +77,7 @@ def update_dish(dish_id):
     if 'descripcion' in request.form: updates['descripcion'] = request.form.get('descripcion')
     if 'precio_plato' in request.form: updates['precio_plato'] = float(request.form.get('precio_plato'))
     if 'categoria' in request.form: updates['categoria'] = request.form.get('categoria')
+    if 'visibilidad' in request.form: updates['visibilidad'] = request.form.get('visibilidad')
     if 'es_de_temporada' in request.form: updates['es_de_temporada'] = request.form.get('es_de_temporada') == 'true'
     
     if 'image' in request.files:

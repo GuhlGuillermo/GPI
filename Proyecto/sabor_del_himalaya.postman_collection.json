@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "ab6f2b09-fa92-4fdb-ac12-8de99adcb681",
+		"name": "Sabor del Himalaya API",
+		"description": "Colección de Postman para interactuar con el flujo de pedidos y gestión de platos.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Autenticación",
+			"item": [
+				{
+					"name": "Login Chef",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"CHEF\",\n    \"secret_key\": \"himalayasecret\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Platos (Catálogo)",
+			"item": [
+				{
+					"name": "Obtener Carta",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dishes/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dishes",
+								""
+							]
+						}
+					}
+				},
+				{
+					"name": "Crear Plato (Chef)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre_plato",
+									"value": "Pakoras de Verdura",
+									"type": "text"
+								},
+								{
+									"key": "descripcion",
+									"value": "Deliciosos buñuelos de harina de garbanzo.",
+									"type": "text"
+								},
+								{
+									"key": "precio_plato",
+									"value": "5.50",
+									"type": "text"
+								},
+								{
+									"key": "categoria",
+									"value": "ENTRANTE",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/dishes/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dishes",
+								""
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pedidos (Checkout)",
+			"item": [
+				{
+					"name": "Crear Nuevo Pedido",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_usuario\": \"invitado\",\n    \"nombre\": \"Javier\",\n    \"email\": \"javier@ejemplo.com\",\n    \"dir_entrega\": \"Calle Falsa 123, Madrid\",\n    \"credit_card\": \"1234567812345678\",\n    \"items\": [\n        {\n            \"id_plato\": \"D1\",\n            \"nombre_plato\": \"Momo de Pollo\",\n            \"precio_plato\": 6.50,\n            \"cantidad\": 2\n        },\n        {\n            \"id_plato\": \"D2\",\n            \"nombre_plato\": \"Tikka Masala\",\n            \"precio_plato\": 14.50,\n            \"cantidad\": 1\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/orders/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000/api"
+		}
+	]
+}

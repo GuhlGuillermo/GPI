@@ -43,7 +43,7 @@ const DishRoulette = ({ title, dishes = [], selectedDishId, onSelect }) => {
               >
                 <div className="h-48 w-full bg-slate-100 relative">
                   {/* Imagen de fallback manejada por backend, pero por si acaso reventara */}
-                  <img src={dish.url_imagen || '/default-dish.png'} alt={dish.nombre_plato} className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src='/default-dish.png'; }} />
+                  <img src={dish.url_imagen || '/default-dish.png'} alt={dish.nombre_plato} className="w-full h-full object-cover" onError={(e) => { if (!e.target.src.endsWith('/default-dish.png')) { e.target.src='/default-dish.png'; } }} />
                   {selectedDishId === dish.id_plato && (
                      <div className="absolute top-3 right-3 bg-brand-primary text-white p-2 rounded-full shadow-md z-10 w-8 h-8 flex items-center justify-center">✓</div>
                   )}

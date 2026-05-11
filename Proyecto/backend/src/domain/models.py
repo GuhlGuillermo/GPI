@@ -40,6 +40,7 @@ class Dish:
     es_de_temporada: bool = False
     url_imagen: str = ""
     activo: bool = True
+    visibilidad: str = "AMBOS"  # Valores posibles: "CARTA", "DIARIO", "AMBOS", "OCULTO"
 
     def __post_init__(self):
         if not self.url_imagen or self.url_imagen.strip() == "":
@@ -53,3 +54,10 @@ class Menu:
     platos_principal: List[str] = field(default_factory=list)
     postres: List[str] = field(default_factory=list)
     precio_menu: float = 0.0
+
+@dataclass
+class DailyBilling:
+    fecha: str
+    total_facturado: float = 0.0
+    cantidad_pedidos: int = 0
+    pedidos_refs: List[str] = field(default_factory=list)

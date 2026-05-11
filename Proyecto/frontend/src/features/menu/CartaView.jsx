@@ -3,16 +3,27 @@ import DishCard from './components/DishCard';
 import ShoppingCart from '../cart/components/ShoppingCart';
 import { apiClient } from '../../core/api';
 
-const CartaView = () => {
+const CartaView = ({ cartItems, setCartItems }) => {
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const handleAddToCart = (dish) => {
+    setCartItems(prev => {
+      const existing = prev.find(i => i.id_plato === dish.id_plato);
+      if (existing) {
+        return prev.map(i => i.id_plato === dish.id_plato ? { ...i, cantidad: i.cantidad + 1 } : i);
+      }
+      return [...prev, { ...dish, cantidad: 1 }];
+    });
+  };
 
   useEffect(() => {
     const fetchDishes = async () => {
       try {
         const res = await apiClient.get('/dishes');
-        // Filtramos para asegurar que no se cuele data corrompida y mostramos todos por carta
-        setDishes(res.data);
+        // Filtramos para asegurar que no se cuele data corrompida y mostramos solo los destinados a carta
+        const filteredDishes = res.data.filter(d => d.visibilidad === 'CARTA' || d.visibilidad === 'AMBOS');
+        setDishes(filteredDishes);
       } catch (err) {
         console.error("Error cargando la carta:", err);
       } finally {
@@ -38,20 +49,18 @@ const CartaView = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {dishes.map(dish => (
-                <DishCard key={dish.id_plato} dish={dish} />
+                <DishCard key={dish.id_plato} dish={dish} onAddToCart={handleAddToCart} />
               ))}
             </div>
           )}
         </div>
 
-        {/* Zona Lateral del checkout - DESHABILITADO TEMPORALMENTE */}
-        {/*
+        {/* Zona Lateral del checkout */}
         <aside className="w-full lg:w-[400px]">
           <div className="sticky top-28">
-            <ShoppingCart />
+            <ShoppingCart items={cartItems} setItems={setCartItems} />
           </div>
         </aside>
-        */}
     </div>
   );
 };

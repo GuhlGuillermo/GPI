@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../core/api';
 import DishRoulette from './components/DishRoulette';
 
-const DailyMenuView = () => {
+const DailyMenuView = ({ setCartItems }) => {
+  const navigate = useNavigate();
   const [dishes, setDishes] = useState({
     starters: [],
     mains: [],
@@ -19,11 +21,12 @@ const DailyMenuView = () => {
       try {
         const res = await apiClient.get('/dishes');
         const allDishes = res.data;
-        
+        const dailyDishes = allDishes.filter(d => d.visibilidad === 'DIARIO' || d.visibilidad === 'AMBOS');
+
         setDishes({
-          starters: allDishes.filter(d => d.categoria === 'ENTRANTE'),
-          mains: allDishes.filter(d => d.categoria === 'PRINCIPAL'),
-          desserts: allDishes.filter(d => d.categoria === 'POSTRE')
+          starters: dailyDishes.filter(d => d.categoria === 'ENTRANTE'),
+          mains: dailyDishes.filter(d => d.categoria === 'PRINCIPAL'),
+          desserts: dailyDishes.filter(d => d.categoria === 'POSTRE')
         });
       } catch (err) {
         console.error("Error cargando platos", err);
@@ -35,6 +38,31 @@ const DailyMenuView = () => {
   }, []);
 
   const isMenuSelected = selectedStarter && selectedMain && selectedDessert;
+
+  const handleAddMenuToCart = () => {
+    if (!isMenuSelected) return;
+
+    // Creamos un ítem especial que representa el menú completo cerrado
+    const menuItem = {
+      id_plato: `menu-${selectedStarter.id_plato}-${selectedMain.id_plato}-${selectedDessert.id_plato}`,
+      nombre_plato: `Menú: ${selectedStarter.nombre_plato} + ${selectedMain.nombre_plato} + ${selectedDessert.nombre_plato}`,
+      precio_plato: 15.00,
+      categoria: 'MENU_DIARIO',
+      cantidad: 1
+    };
+
+    setCartItems(prev => {
+      // Si ya existe exactamente este menú, incrementamos la cantidad
+      const existing = prev.find(i => i.id_plato === menuItem.id_plato);
+      if (existing) {
+        return prev.map(i => i.id_plato === menuItem.id_plato ? { ...i, cantidad: i.cantidad + 1 } : i);
+      }
+      return [...prev, menuItem];
+    });
+
+    // Redirigimos a la carta donde se ve el carrito con el menú añadido
+    navigate('/carta');
+  };
 
   if(loading) return <div className="text-center py-20 text-slate-500 font-bold text-xl animate-pulse">Precalentando cocinas...</div>;
 
@@ -71,8 +99,7 @@ const DailyMenuView = () => {
         />
       </div>
 
-      {/* Checkout inferior dedicado al Menú - DESHABILITADO TEMPORALMENTE */}
-      {/*
+      {/* Checkout inferior dedicado al Menú */}
       <div className="flex flex-col md:flex-row items-center justify-between p-6 bg-slate-900 rounded-2xl shadow-xl sticky bottom-4 z-50">
          <div className="mb-4 md:mb-0">
              <span className="block text-slate-400 text-sm mb-1">
@@ -83,13 +110,14 @@ const DailyMenuView = () => {
          <button 
            className="w-full md:w-auto bg-brand-accent hover:bg-yellow-500 disabled:opacity-50 disabled:bg-slate-700 text-slate-900 disabled:text-slate-400 px-10 py-4 rounded-xl font-bold text-lg transition-all cursor-pointer transform hover:scale-105 active:scale-95"
            disabled={!isMenuSelected}
+           onClick={handleAddMenuToCart}
          >
-           {isMenuSelected ? 'Añadir Menú al Pedido' : 'Selecciona las 3 opciones'}
+           {isMenuSelected ? '🛒 Añadir Menú al Pedido' : 'Selecciona las 3 opciones'}
          </button>
       </div>
-      */}
     </div>
   );
 };
 
 export default DailyMenuView;
+
