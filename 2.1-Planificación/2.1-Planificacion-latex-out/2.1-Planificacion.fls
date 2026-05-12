@@ -111,16 +111,13 @@ INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc
 INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmr17.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmbx12.tfm
-INPUT 2.1-Planificacion-latex-out/2.1-Planificacion.toc
-INPUT 2.1-Planificacion-latex-out/2.1-Planificacion.toc
-INPUT 2.1-Planificacion-latex-out/2.1-Planificacion.toc
-INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmbx12.tfm
 OUTPUT 2.1-Planificacion-latex-out/2.1-Planificacion.toc
 INPUT ./diagrama_gantt.png
 INPUT ./diagrama_gantt.png
 INPUT ./diagrama_gantt.png
 INPUT ./diagrama_gantt.png
 INPUT ./diagrama_gantt.png
+INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmbx12.tfm
 INPUT /usr/share/texmf/tex/latex/lm/ts1lmr.fd
 INPUT /usr/share/texmf/tex/latex/lm/ts1lmr.fd
 INPUT /usr/share/texmf/tex/latex/lm/ts1lmr.fd
