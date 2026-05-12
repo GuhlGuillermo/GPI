@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1778576041.01174 "/home/javier/Escritorio/GPI/GPI/2.1-Planificación/2.1-Planificacion.tex" "2.1-Planificacion-latex-out/2.1-Planificacion.pdf" "2.1-Planificacion" 1778576043.49708 0
+["pdflatex"] 1778577341.3791 "/home/javier/Escritorio/GPI/GPI/2.1-Planificación/2.1-Planificacion.tex" "2.1-Planificacion-latex-out/2.1-Planificacion.pdf" "2.1-Planificacion" 1778577343.87655 0
   "/etc/texmf/web2c/texmf.cnf" 1754130460.01692 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/javier/Escritorio/GPI/GPI/2.1-Planificación/2.1-Planificacion.tex" 1778576040.67935 7186 12e08301ba5e5e44805fbdf75efdeaea ""
+  "/home/javier/Escritorio/GPI/GPI/2.1-Planificación/2.1-Planificacion.tex" 1778577341.04107 7301 baabda8fafa3b17e98dcef4b198a6c21 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1246382020 928 2dc8d444221b7a635bb58038579b861a ""
@@ -70,9 +70,9 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1754130484.88622 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1754130519 8214774 5dc8c42d008b4cbcfcfa34dd836e3d18 ""
-  "2.1-Planificacion-latex-out/2.1-Planificacion.aux" 1778576043.40177 933 a7350a322c0d5d25898e0839f99f4284 "pdflatex"
-  "2.1-Planificacion-latex-out/2.1-Planificacion.toc" 1778576043.40377 270 3f2088e156005cf8ac7bb13615172da3 "pdflatex"
-  "2.1-Planificacion.tex" 1778576040.67935 7186 12e08301ba5e5e44805fbdf75efdeaea ""
+  "2.1-Planificacion-latex-out/2.1-Planificacion.aux" 1778577343.78308 933 a7350a322c0d5d25898e0839f99f4284 "pdflatex"
+  "2.1-Planificacion-latex-out/2.1-Planificacion.toc" 1778577343.78608 270 3f2088e156005cf8ac7bb13615172da3 "pdflatex"
+  "2.1-Planificacion.tex" 1778577341.04107 7301 baabda8fafa3b17e98dcef4b198a6c21 ""
   "diagrama_gantt.png" 1778447403.34034 1066121 e7e8bdfd6e7ade270edf06c253a32f48 ""
   (generated)
   "2.1-Planificacion-latex-out/2.1-Planificacion.aux"
