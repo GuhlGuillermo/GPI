@@ -15,6 +15,7 @@ class MongoOrderRepository:
     def save(self, order: Order) -> None:
         data = {
             '_id': order.id_pedido,
+            'id_pedido': order.id_pedido,
             'id_usuario': order.id_usuario,
             'importe_total': order.importe_total,
             'estado': order.estado,
@@ -31,6 +32,30 @@ class MongoOrderRepository:
             ]
         }
         self.collection.update_one({'_id': order.id_pedido}, {'$set': data}, upsert=True)
+
+    def get_all_orders(self) -> list[Order]:
+        cursor = self.collection.find().sort('hora_entrega', pymongo.DESCENDING)
+        orders = []
+        for data in cursor:
+            items = [
+                OrderItem(
+                    id_plato=item['id_plato'],
+                    nombre_plato=item['nombre_plato'],
+                    precio_plato=item['precio_plato'],
+                    cantidad=item['cantidad']
+                ) for item in data.get('items', [])
+            ]
+            orders.append(Order(
+                id_pedido=data.get('id_pedido', str(data['_id'])),
+                id_usuario=data.get('id_usuario', ''),
+                items=items,
+                importe_total=data.get('importe_total', 0.0),
+                estado=data.get('estado', 'RECIBIDO'),
+                dir_entrega=data.get('dir_entrega', ''),
+                hora_entrega=data.get('hora_entrega'),
+                info_pago=data.get('info_pago', '')
+            ))
+        return orders
 
 class MongoUserRepository:
     """Implementación de persistencia para Usuarios"""
@@ -102,6 +127,24 @@ class MongoDishRepository:
         
     def get_by_id(self, dish_id: str):
         data = self.collection.find_one({'_id': dish_id})
+        if not data: return None
+        return Dish(
+            id_plato=str(data['_id']),
+            nombre_plato=data['nombre_plato'],
+            descripcion=data.get('descripcion', ''),
+            precio_plato=data['precio_plato'],
+            categoria=data['categoria'],
+            es_de_temporada=data.get('es_de_temporada', False),
+            url_imagen=data.get('url_imagen', ''),
+            activo=data.get('activo', True),
+            visibilidad=data.get('visibilidad', 'AMBOS')
+        )
+
+    def get_by_name(self, nombre_plato: str) -> Dish | None:
+        import re
+        # Búsqueda case-insensitive exacta para evitar duplicados como 'Pollo' y 'pollo'
+        query = {'nombre_plato': {'$regex': f'^{re.escape(nombre_plato)}$', '$options': 'i'}}
+        data = self.collection.find_one(query)
         if not data: return None
         return Dish(
             id_plato=str(data['_id']),

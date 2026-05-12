@@ -113,7 +113,7 @@ def seed_database():
         try:
             if dish["file_name"] != "":
                 with open(img_path, 'rb') as f:
-                    files = {'imagen': (dish["file_name"], f, 'image/png')}
+                    files = {'image': (dish["file_name"], f, 'image/png')}
                     response = requests.post(API_URL, data=data, files=files)
             else:
                 response = requests.post(API_URL, data=data)

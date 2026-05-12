@@ -7,6 +7,7 @@ const ChefBillingDashboard = () => {
     total_estimado: 0.0,
     cantidad_pedidos: 0
   });
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [flushing, setFlushing] = useState(false);
 
@@ -15,8 +16,11 @@ const ChefBillingDashboard = () => {
     try {
       const res = await apiClient.get('/billing/today');
       setBillingData(res.data);
+      
+      const ordersRes = await apiClient.get('/orders/');
+      setOrders(ordersRes.data);
     } catch (err) {
-      console.error("Error obteniendo facturación:", err);
+      console.error("Error obteniendo datos:", err);
     } finally {
       setLoading(false);
     }
@@ -68,7 +72,7 @@ const ChefBillingDashboard = () => {
           <div className="text-6xl font-black font-display tracking-tight">
              {billingData.total_estimado.toFixed(2)}<span className="text-4xl">€</span>
           </div>
-          <p className="mt-4 text-emerald-100 text-sm">Recaudación combinada (MongoDB + RAM en vivo).</p>
+          <p className="mt-4 text-emerald-100 text-sm">Recaudación combinada.</p>
         </div>
 
         {/* Card de Volumen */}
@@ -91,8 +95,67 @@ const ChefBillingDashboard = () => {
           disabled={flushing}
           className="bg-rose-600 hover:bg-rose-700 text-white text-lg font-black py-4 px-10 rounded-xl shadow-lg shadow-rose-600/30 transition-all hover:scale-105 active:scale-95 flex mx-auto items-center gap-3 disabled:opacity-50 disabled:pointer-events-none"
         >
-          {flushing ? 'Procesando Volcado...' : '🔒 Ejecutar Cierre de Caja (Flush)'}
+          {flushing ? 'Procesando Volcado...' : '🔒 Ejecutar Cierre de Caja'}
         </button>
+      </div>
+
+      {/* Listado de Pedidos */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-black text-slate-800 mb-6">Listado de Pedidos en Tiempo Real</h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 text-slate-500 text-sm uppercase tracking-wider">
+                  <th className="p-4 font-bold border-b border-slate-200">ID Pedido</th>
+                  <th className="p-4 font-bold border-b border-slate-200">Usuario</th>
+                  <th className="p-4 font-bold border-b border-slate-200">Importe</th>
+                  <th className="p-4 font-bold border-b border-slate-200">Estado</th>
+                  <th className="p-4 font-bold border-b border-slate-200">Hora</th>
+                  <th className="p-4 font-bold border-b border-slate-200">Info Pago</th>
+                  <th className="p-4 font-bold border-b border-slate-200">Origen Dato</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {orders.length > 0 ? (
+                  orders.map(order => (
+                    <tr key={order.id_pedido} className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 text-sm font-mono text-slate-600 truncate max-w-[120px]" title={order.id_pedido}>
+                        {order.id_pedido}
+                      </td>
+                      <td className="p-4 text-sm text-slate-700 font-medium">
+                        {order.id_usuario === 'invitado' ? 'Invitado' : order.id_usuario.substring(0, 8) + '...'}
+                      </td>
+                      <td className="p-4 text-sm font-bold text-emerald-600">
+                        {order.importe_total.toFixed(2)}€
+                      </td>
+                      <td className="p-4 text-sm">
+                        <span className="bg-brand-light text-brand-dark px-2 py-1 rounded-md text-xs font-bold">
+                          {order.estado}
+                        </span>
+                      </td>
+                      <td className="p-4 text-sm text-slate-500">
+                        {order.hora_entrega ? new Date(order.hora_entrega).toLocaleTimeString() : '---'}
+                      </td>
+                      <td className="p-4 text-sm text-slate-600">
+                        {order.info_pago || '---'}
+                      </td>
+                      <td className="p-4 text-sm font-mono text-indigo-600 font-semibold bg-indigo-50">
+                        {order.origen_dato}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="p-8 text-center text-slate-400">
+                      No hay pedidos registrados en el sistema.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

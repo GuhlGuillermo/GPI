@@ -23,9 +23,11 @@ class BillingBufferManager:
         self.total_facturado = 0.0
         self.cantidad_pedidos = 0
         self.pedidos_refs = []
+        self.pedidos_en_ram = []
+        self.usuarios_en_ram = {}
         self.MAX_BUFFER_SIZE = 500  # Límite anti-saturación
 
-    def add_order(self, order_id: str, importe: float):
+    def add_order(self, order, user=None):
         hoy = datetime.now().strftime('%Y-%m-%d')
         
         # Si cambiamos de día, volcamos el día anterior
@@ -33,9 +35,12 @@ class BillingBufferManager:
             self.flush_to_db()
             self.fecha_actual = hoy
             
-        self.total_facturado += importe
+        self.total_facturado += order.importe_total
         self.cantidad_pedidos += 1
-        self.pedidos_refs.append(order_id)
+        self.pedidos_refs.append(order.id_pedido)
+        self.pedidos_en_ram.append(order)
+        if user:
+            self.usuarios_en_ram[user.id_usuario] = user
         
         # Volcado de seguridad para no consumir toda la RAM del VPS
         if self.cantidad_pedidos >= self.MAX_BUFFER_SIZE:
@@ -45,6 +50,19 @@ class BillingBufferManager:
         """Vuelca la RAM actual a Mongo y limpia el buffer"""
         if self.cantidad_pedidos == 0:
             return # Nada que guardar
+            
+        # Dependencias de inyección tardía
+        from src.infrastructure.database.mongo_repos import MongoOrderRepository, MongoUserRepository
+        order_repo = MongoOrderRepository()
+        user_repo = MongoUserRepository()
+        
+        # 1. Volcar los pedidos de RAM a MongoDB
+        for order_ram in self.pedidos_en_ram:
+            order_repo.save(order_ram)
+            
+        # 2. Volcar los usuarios de RAM a MongoDB
+        for user_ram in self.usuarios_en_ram.values():
+            user_repo.save(user_ram)
             
         billing = DailyBilling(
             fecha=self.fecha_actual,
@@ -58,6 +76,11 @@ class BillingBufferManager:
         self.total_facturado = 0.0
         self.cantidad_pedidos = 0
         self.pedidos_refs = []
+        self.pedidos_en_ram = []
+        self.usuarios_en_ram = {}
+
+    def get_orders_in_ram(self) -> list:
+        return self.pedidos_en_ram
 
     def get_current_snapshot(self) -> dict:
         """Devuelve una foto rápida del estado consolidado + lo que hay en RAM"""

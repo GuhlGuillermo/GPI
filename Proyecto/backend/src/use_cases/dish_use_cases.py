@@ -1,6 +1,7 @@
 import uuid
 from typing import List, Dict, Any
 from src.domain.models import Dish
+from src.domain.exceptions import DuplicateDishException
 from src.infrastructure.database.mongo_repos import MongoDishRepository
 
 class DishUseCases:
@@ -17,6 +18,9 @@ class DishUseCases:
         return dish
 
     def create_dish(self, nombre_plato: str, descripcion: str, precio_plato: float, categoria: str, url_imagen: str = "", visibilidad: str = "AMBOS") -> Dish:
+        if self.dish_repo.get_by_name(nombre_plato):
+            raise DuplicateDishException(f"Ya existe un plato registrado con el nombre '{nombre_plato}'.")
+            
         dish = Dish(
             id_plato=str(uuid.uuid4()),
             nombre_plato=nombre_plato,
@@ -34,7 +38,12 @@ class DishUseCases:
     def update_dish(self, dish_id: str, updates: Dict[str, Any]) -> Dish:
         dish = self.get_dish(dish_id)
         
-        if 'nombre_plato' in updates: dish.nombre_plato = updates['nombre_plato']
+        if 'nombre_plato' in updates and updates['nombre_plato'] != dish.nombre_plato:
+            existing = self.dish_repo.get_by_name(updates['nombre_plato'])
+            if existing and existing.id_plato != dish.id_plato:
+                raise DuplicateDishException(f"Ya existe otro plato registrado con el nombre '{updates['nombre_plato']}'.")
+            dish.nombre_plato = updates['nombre_plato']
+            
         if 'descripcion' in updates: dish.descripcion = updates['descripcion']
         if 'precio_plato' in updates: dish.precio_plato = updates['precio_plato']
         if 'categoria' in updates: dish.categoria = updates['categoria']

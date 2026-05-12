@@ -15,10 +15,10 @@ class CreateOrderUseCase:
         self.order_repo = order_repo
         self.user_repo = user_repo
 
-    def execute(self, user_id: str, items_data: list, credit_card: str, dir_entrega: str = "", nombre: str = "", email: str = "") -> Order:
+    def execute(self, user_id: str, items_data: list, credit_card: str, dir_entrega: str = "", nombre: str = "", email: str = "", ignore_schedule: bool = False) -> Order:
         now = datetime.now()
         is_weekend = now.weekday() >= 5
-        if is_weekend or not (13 <= now.hour < 16):
+        if not ignore_schedule and (is_weekend or not (13 <= now.hour < 16)):
             raise OutOfHoursException("Solo se aceptan pedidos de lunes a viernes entre las 13:00 y las 16:00.")
 
         if not credit_card.isdigit() or len(credit_card) != 16:
@@ -79,14 +79,37 @@ class CreateOrderUseCase:
             info_pago="TARJETA"
         )
 
-        self.order_repo.save(order)
-        
         if user:
             user.gasto_total += order.importe_total
-            self.user_repo.save(user)
 
-        # Volcar al gestor en memoria (Buffer Anti-Saturación)
+        # Volcar al gestor en memoria (Buffer Anti-Saturación) en lugar de guardar en Mongo
         from src.use_cases.billing_buffer import BillingBufferManager
-        BillingBufferManager().add_order(order.id_pedido, order.importe_total)
+        BillingBufferManager().add_order(order, user)
 
         return order
+
+class GetOrdersUseCase:
+    """
+    Caso de uso para consultar el listado de pedidos (para métricas en tiempo real de facturación y cocina).
+    """
+    def __init__(self, order_repo):
+        self.order_repo = order_repo
+
+    def execute(self) -> list[Order]:
+        db_orders = self.order_repo.get_all_orders()
+        
+        from src.use_cases.billing_buffer import BillingBufferManager
+        ram_orders = BillingBufferManager().get_orders_in_ram()
+        
+        # Combinar ambos (RAM tiene los más recientes) añadiendo la propiedad
+        for o in ram_orders:
+            o.origen_dato = "RAM (En Vivo)"
+            
+        for o in db_orders:
+            o.origen_dato = "MongoDB"
+            
+        all_orders = ram_orders + db_orders
+        
+        # Opcional: Asegurar que no hay duplicados si acaba de ocurrir un flush
+        unique_orders = {o.id_pedido: o for o in all_orders}
+        return list(unique_orders.values())

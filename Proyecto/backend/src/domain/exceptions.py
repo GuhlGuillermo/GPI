@@ -10,3 +10,6 @@ class MinimumOrderException(BusinessRuleException):
 
 class InvalidPaymentException(BusinessRuleException):
     pass
+
+class DuplicateDishException(BusinessRuleException):
+    pass
